@@ -1,0 +1,251 @@
+{ "objects" :[
+	{
+"icon" : "icon_african", 
+"title" : "African music", 
+"color": "#88662c" 
+},
+{
+"icon" : "icon_indie", 
+"title" : "Indie", 
+"color": "#43b5a4" 
+},
+{
+"icon" : "icon_art_rock", 
+"title" : "Art rock", 
+"color": "#0d7fff" 
+},
+{
+"icon" : "icon_indie_folk", 
+"title" : "Indie folk", 
+"color": "#989722" 
+},
+{
+"icon" : "icon_black_metal", 
+"title" : "Black metal", 
+"color": "#990000" 
+},
+{
+"icon" : "icon_jazz", 
+"title" : "Jazz", 
+"color": "#555555" 
+},
+{
+"icon" : "icon_blues", 
+"title" : "Blues", 
+"color": "#cb8100" 
+},
+{
+"icon" : "icon_jingles", 
+"title" : "Jingles", 
+"color": "#43a766" 
+},
+{
+"icon" : "icon_british_punk", 
+"title" : "British punk rock", 
+"color": "#ff0000" 
+},
+{
+"icon" : "icon_k_pop", 
+"title" : "K-pop", 
+"color": "#ff00f6" 
+},
+{
+"icon" : "icon_celtic", 
+"title" : "Celtic", 
+"color": "#b86f34" 
+},
+{
+"icon" : "icon_lounge_music", 
+"title" : "Lounge", 
+"color": "#cfb7a4" 
+},
+{
+"icon" : "icon_children", 
+"title" : "Music for children", 
+"color": "#00d2ff" 
+},
+{
+"icon" : "icon_march", 
+"title" : "March", 
+"color": "#c93131" 
+},
+{
+"icon" : "icon_christian_rock", 
+"title" : "Christian rock", 
+"color": "#c6c6c6" 
+},
+{
+"icon" : "icon_mariachi", 
+"title" : "Mariachi", 
+"color": "#d0c50d" 
+},
+{
+"icon" : "icon_church", 
+"title" : "Church", 
+"color": "#878888" 
+},
+{
+"icon" : "icon_medieval", 
+"title" : "Medieval", 
+"color": "#37a3ba" 
+},
+{
+"icon" : "icon_classical", 
+"title" : "Classic music", 
+"color": "#c6be6a" 
+},
+{
+"icon" : "icon_new_age", 
+"title" : "New age", 
+"color": "#1800ff" 
+},
+{
+"icon" : "icon_comedy", 
+"title" : "Comedy", 
+"color": "#50ba89" 
+},
+{
+"icon" : "icon_nu_metal", 
+"title" : "Nu metal", 
+"color": "#3a7c5e" 
+},
+{
+"icon" : "icon_country", 
+"title" : "Country music", 
+"color": "#708cc6" 
+},
+{
+"icon" : "icon_opera", 
+"title" : "Opera", 
+"color": "#eaacb7" 
+},
+{
+"icon" : "icon_disco", 
+"title" : "Disco", 
+"color": "#3834d7" 
+},
+{
+"icon" : "icon_pop", 
+"title" : "Pop music", 
+"color": "#70e361" 
+},
+{
+"icon" : "icon_electro", 
+"title" : "Electronic music", 
+"color": "#6fa749" 
+},
+{
+"icon" : "icon_punk_rock", 
+"title" : "Punk rock", 
+"color": "#9d886e" 
+},
+{
+"icon" : "icon_emo", 
+"title" : "Emo", 
+"color": "#ef00f8" 
+},
+{
+"icon" : "icon_r_and_b", 
+"title" : "R&B", 
+"color": "#f8e400" 
+},
+{
+"icon" : "icon_flamenco", 
+"title" : "Flamenco", 
+"color": "#ec375d" 
+},
+{
+"icon" : "icon_rap", 
+"title" : "Rap and Hip-hop", 
+"color": "#f8e400" 
+},
+{
+"icon" : "icon_funk", 
+"title" : "func", 
+"color": "#c337ec" 
+},
+{
+"icon" : "icon_reggae", 
+"title" : "Reggae", 
+"color": "#48bc6b" 
+},
+{
+"icon" : "icon_ghospel", 
+"title" : "Ghospel", 
+"color": "#3e2fd4" 
+},
+{
+"icon" : "icon_rockabilly", 
+"title" : "Rockabilly", 
+"color": "#bd85a5" 
+},
+{
+"icon" : "icon_ghotic", 
+"title" : "Ghotic", 
+"color": "#000000" 
+},
+{
+"icon" : "icon_salsa", 
+"title" : "Salsa", 
+"color": "#41d2c3" 
+},
+{
+"icon" : "icon_glam_rock", 
+"title" : "Glam rock", 
+"color": "#e30c01" 
+},
+{
+"icon" : "icon_soul", 
+"title" : "soul", 
+"color": "#e1c6c5" 
+},
+{
+"icon" : "icon_gregorian_chants", 
+"title" : "chants", 
+"color": "#e1c6c5" 
+},
+{
+"icon" : "icon_soundtrack", 
+"title" : "Soundtrack", 
+"color": "#e1c6c5" 
+},
+{
+"icon" : "icon_grunge", 
+"title" : "Grunge", 
+"color": "#e1c6c5" 
+},
+{
+"icon" : "icon_sport", 
+"title" : "Music for sport", 
+"color": "#e1c6c5" 
+},
+{
+"icon" : "icon_heavy_metal", 
+"title" : "Heavy metal", 
+"color": "#e1c6c5" 
+},
+{
+"icon" : "icon_surf", 
+"title" : "Music for surfing", 
+"color": "#e1c6c5" 
+},
+{
+"icon" : "icon_holiday", 
+"title" : "Holiday music", 
+"color": "#e1c6c5" 
+},
+{
+"icon" : "icon_vocal", 
+"title" : "Vocal", 
+"color": "#e1c6c5" 
+},
+{
+"icon" : "icon_indian", 
+"title" : "Inidan music", 
+"color": "#e1c6c5" 
+},
+{
+"icon" : "icon_punk", 
+"title" : "Punk", 
+"color": "#e1c6c5" 
+} ] }

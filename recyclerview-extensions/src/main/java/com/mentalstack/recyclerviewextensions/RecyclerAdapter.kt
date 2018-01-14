@@ -9,42 +9,46 @@ import android.view.ViewGroup
  * Created by aleksandrovdenis on 13.01.2018.
  */
 class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
-    protected val items = mutableListOf<Pair<Int, View.() -> Unit>>()
+    protected val items = mutableListOf<RecyclerHolder>()
 
-    fun add(type: Int, method: View.() -> Unit) {
-        items.add(type to method)
+    fun add(element: RecyclerHolder) {
+        items.add(element)
         notifyItemChanged(items.size - 1)
     }
 
-    fun add(list: List<Pair<Int, View.() -> Unit>>) {
-        items.addAll(list)
-        notifyItemRangeChanged( items.size - list.size - 1, list.size)
+    fun add(type: Int, method: View.() -> Unit) = add(RecyclerHolder(type, method))
+
+    fun addAll(elements: List<RecyclerHolder>) {
+        items.addAll(elements)
+        notifyItemRangeChanged(items.size - elements.size - 1, elements.size)
     }
 
-    fun remove(index:Int){
-        items.removeAt( index )
-        notifyItemRemoved(index)
-    }
-
-    fun remove( element: Pair<Int, View.()->Unit>){
-        items.indexOf(element).let {
-            if(it > 0)
-                remove(it)
+    fun addPairs(list: List<Pair<Int, View.() -> Unit>>) = addAll(list.map { RecyclerHolder(it.first, it.second) })
+    fun remove(index: Int) {
+        if (index > 0) {
+            items.removeAt(index)
+            notifyItemRemoved(index)
         }
     }
+
+    fun remove(element: RecyclerHolder) = items.indexOf(element).let { remove(it) }
+
+    fun remove(element: Pair<Int, View.() -> Unit>) =
+            items.indexOfFirst { it.equals(element) }.let { remove(it) }
+
 
     fun clear() = items.clear()
 
     override fun onBindViewHolder(holder: AbstractViewHolder?, position: Int) {
         val item = items.getOrNull(position) ?: throw Exception("bounds of list")
-        if (holder?.type != item.first) throw Exception("unsupported type holder/item")
+        if (holder?.type != item.type) throw Exception("unsupported type holder/item")
         val view = holder?.itemView ?: throw Exception("holder is null")
 
-        item.second.invoke(view)
+        item.method.invoke(view)
     }
 
     override fun getItemViewType(position: Int): Int {
-        return items.getOrNull(position)?.first ?: throw Exception("bounds of list")
+        return items.getOrNull(position)?.type ?: throw Exception("bounds of list")
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): AbstractViewHolder {

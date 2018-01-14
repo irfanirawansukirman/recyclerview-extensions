@@ -32,18 +32,12 @@ class MultiRecycler : RecyclerView {
         val a = context.obtainStyledAttributes(attrs,
                 R.styleable.MultiRecycler, 0, 0)
 
-        val direction = if (a.hasValue(R.styleable.MultiRecycler_direction))
-            a.getInt(R.styleable.MultiRecycler_direction, 0)
-        else null
-        val cells = if (a.hasValue(R.styleable.MultiRecycler_cells))
-            a.getInt(R.styleable.MultiRecycler_cells, 1)
-        else 1
+        val direction = a.getInt(R.styleable.MultiRecycler_direction, 0)
+        val cells = a.getInt(R.styleable.MultiRecycler_cells, 1)
 
-        direction?.let { direction ->
-            if (direction == 1)
-                setVertical(cells)
-            else
-                setHorizontal(cells)
+        when (direction) {
+            1 -> setVertical(cells)
+            2 -> setHorizontal(cells)
         }
 
         a.recycle()

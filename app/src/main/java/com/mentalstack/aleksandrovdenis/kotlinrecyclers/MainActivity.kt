@@ -13,7 +13,7 @@ class MainActivity : AppCompatActivity() {
 
         loadJSON(baseContext, "music_genres.json")?.let { rawString ->
             parseString(rawString)?.let { rawObj ->
-                (rawObj.get("objects") as? ArrayList<Map<String, Any>>)?.let { rawArray ->
+                (rawObj["objects"] as? ArrayList<Map<String, Any>>)?.let { rawArray ->
                     presentList(rawArray)
                 }
             }
@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun presentList(rawArray: ArrayList<Map<String, Any>>) {
-        main_recycler.adapter.add(constructScrollerData(rawArray))
+        main_recycler.adapter.addPairs(constructScrollerData(rawArray))
     }
 
 

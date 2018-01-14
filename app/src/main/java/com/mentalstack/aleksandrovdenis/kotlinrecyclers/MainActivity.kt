@@ -13,8 +13,8 @@ class MainActivity : AppCompatActivity() {
 
         loadJSON(baseContext, "music_genres.json")?.let { rawString ->
             parseString(rawString)?.let { rawObj ->
-                (rawObj["objects"] as? ArrayList<Map<String, Any>>)?.let { rawArray ->
-                    presentList(rawArray)
+                (rawObj["objects"] as? ArrayList<Map<String, Any>>)?.let {
+                    constructScrollerData(it)
                 }
             }
         }
@@ -24,17 +24,15 @@ class MainActivity : AppCompatActivity() {
             array.map { rawElement ->
                 val title = (rawElement["title"] as? String) ?: ""
                 when {
-                    title.contains("metal") -> GenreData(rawElement).constructViewCell2()
-                    title.contains("rock") -> GenreData(rawElement).constructViewCell1()
-                    title.contains("indie") -> GenreData2(rawElement).constructViewCell1()
-                    else -> GenreData2(rawElement).constructViewCell2()
+                    title.contains("metal") -> //as interface IRecyclerHolder
+                        main_recycler.adapter.add(GenreData(rawElement).constructViewCell2())
+                    title.contains("rock") -> // as data class with implementation
+                        main_recycler.adapter.add(GenreData(rawElement))
+                    title.contains("indie") -> // as pair
+                        main_recycler.adapter.add(GenreData2(rawElement).constructViewCell1())
+                    else -> //as simple class RecyclerHolder
+                        main_recycler.adapter.add(GenreData2(rawElement).constructViewCell2())
                 }
             }
-
-
-    private fun presentList(rawArray: ArrayList<Map<String, Any>>) {
-        main_recycler.adapter.addPairs(constructScrollerData(rawArray))
-    }
-
 
 }

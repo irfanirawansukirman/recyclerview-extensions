@@ -9,16 +9,18 @@ import android.view.ViewGroup
  * Created by aleksandrovdenis on 13.01.2018.
  */
 class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
-    protected val items = mutableListOf<RecyclerHolder>()
+    protected val items = mutableListOf<IRecyclerHolder>()
 
-    fun add(element: RecyclerHolder) {
+    fun add(element: IRecyclerHolder) {
         items.add(element)
         notifyItemChanged(items.size - 1)
     }
 
+    fun add(value: Pair<Int, View.() -> Unit>) = add(RecyclerHolder(value.first, value.second))
     fun add(type: Int, method: View.() -> Unit) = add(RecyclerHolder(type, method))
 
-    fun addAll(elements: List<RecyclerHolder>) {
+
+    fun addAll(elements: List<IRecyclerHolder>) {
         items.addAll(elements)
         notifyItemRangeChanged(items.size - elements.size - 1, elements.size)
     }
@@ -41,14 +43,14 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
 
     override fun onBindViewHolder(holder: AbstractViewHolder?, position: Int) {
         val item = items.getOrNull(position) ?: throw Exception("bounds of list")
-        if (holder?.type != item.type) throw Exception("unsupported type holder/item")
+        if (holder?.type != item.getType()) throw Exception("unsupported type holder/item")
         val view = holder?.itemView ?: throw Exception("holder is null")
 
-        item.method.invoke(view)
+        item.bindMethod.invoke(view)
     }
 
     override fun getItemViewType(position: Int): Int {
-        return items.getOrNull(position)?.type ?: throw Exception("bounds of list")
+        return items.getOrNull(position)?.getType() ?: throw Exception("bounds of list")
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): AbstractViewHolder {

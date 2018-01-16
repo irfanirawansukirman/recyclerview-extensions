@@ -3,9 +3,10 @@
     <declare-styleable name="MultiRecycler">
         <attr name="direction">
             <enum name="vertical" value="1" />
-            <enum name="horizontal" value="2"/>
+            <enum name="horizontal" value="2" />
         </attr>
 
-        <attr name="cells" format="integer"/>
+        <attr name="reverse" format="boolean" />
+        <attr name="cells" format="integer" />
     </declare-styleable>
 </resources>

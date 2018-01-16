@@ -34,10 +34,11 @@ class MultiRecycler : RecyclerView {
 
         val direction = a.getInt(R.styleable.MultiRecycler_direction, 0)
         val cells = a.getInt(R.styleable.MultiRecycler_cells, 1)
+        val reverse = a.getBoolean(R.styleable.MultiRecycler_reverse, false)
 
         when (direction) {
-            1 -> setVertical(cells)
-            2 -> setHorizontal(cells)
+            1 -> setVertical(cells, reverse)
+            2 -> setHorizontal(cells, reverse)
         }
 
         a.recycle()

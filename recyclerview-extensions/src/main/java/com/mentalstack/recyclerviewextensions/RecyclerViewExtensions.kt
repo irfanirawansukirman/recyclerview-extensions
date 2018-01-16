@@ -25,6 +25,10 @@ private fun RecyclerView.attachLayout(direction: Int, elementsInRow: Int, revers
     setHasFixedSize(true)
 }
 
+fun RecyclerView.getDirection() =
+        (layoutManager as? LinearLayoutManager)?.layoutDirection ?:
+                (layoutManager as? GridLayoutManager)?.layoutDirection
+
 fun RecyclerView.getVisibleIndexes(): Pair<Int, Int>? {
     return (layoutManager as? LinearLayoutManager)?.let {
         Pair(it.findFirstVisibleItemPosition(), it.findLastVisibleItemPosition())
@@ -32,3 +36,15 @@ fun RecyclerView.getVisibleIndexes(): Pair<Int, Int>? {
         Pair(it.findFirstVisibleItemPosition(), it.findLastVisibleItemPosition())
     }
 }
+
+fun RecyclerView.elementsInRow() =
+        (layoutManager as? LinearLayoutManager)?.let { 1 } ?:
+                (layoutManager as? GridLayoutManager)?.let { it.spanCount }
+
+fun RecyclerView.lastVisibleIndex() =
+        (layoutManager as? LinearLayoutManager)?.findLastVisibleItemPosition() ?:
+                (layoutManager as? GridLayoutManager)?.findLastVisibleItemPosition()
+
+fun RecyclerView.firstVibleIndex() =
+        (layoutManager as? LinearLayoutManager)?.findFirstVisibleItemPosition() ?:
+                (layoutManager as? GridLayoutManager)?.findFirstVisibleItemPosition()

@@ -21,7 +21,12 @@ android {
     }
 
 }
+
+buildscript {
+    ext.kotlin_version = '1.2.10'
+}
 def supportLibrary = "26.1.0"
+ext.anko_version='0.10.4'
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -31,6 +36,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    compile "org.jetbrains.anko:anko-sdk25-coroutines:$anko_version"
 }
 
 repositories {

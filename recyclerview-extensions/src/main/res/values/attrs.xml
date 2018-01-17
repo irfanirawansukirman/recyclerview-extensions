@@ -6,6 +6,7 @@
             <enum name="horizontal" value="2" />
         </attr>
 
+        <attr name="pagination_sensitive" format="integer" />
         <attr name="reverse" format="boolean" />
         <attr name="cells" format="integer" />
     </declare-styleable>

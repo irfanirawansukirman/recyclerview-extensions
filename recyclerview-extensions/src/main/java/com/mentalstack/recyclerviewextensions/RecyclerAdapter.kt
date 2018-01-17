@@ -56,7 +56,7 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
         items.add(element)
         notifyItemChanged(items.size - 1)
     }
-    
+
     fun addPairs(list: List<Pair<Int, View.() -> Unit>>) = addAll(list.map { RecyclerHolder(it.first, it.second) })
     fun addAll(elements: List<IRecyclerHolder>) {
         items.addAll(elements)

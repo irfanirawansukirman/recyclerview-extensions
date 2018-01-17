@@ -10,10 +10,19 @@ import org.jetbrains.anko.runOnUiThread
  * Created by aleksandrovdenis on 13.01.2018.
  */
 class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
-    private var paginator: IPaginator? = null
-    fun addPaginator(value: IPaginator) {
-        paginator = value
-    }
+
+    var paginationSensitive = 1
+        set(value) {
+            if (value > 1) field = value
+        }
+
+    var startPaginator: (((List<IRecyclerHolder>) -> Unit) -> Unit)? = null
+    var endPaginator: (((List<IRecyclerHolder>) -> Unit) -> Unit)? = null
+
+    private var paginatorProcessed: Boolean = false
+    private val scrollListener by lazy { ScrollListener(this) }
+
+    private var recycler: RecyclerView? = null
 
     internal val items = mutableListOf<IRecyclerHolder>()
 
@@ -36,7 +45,6 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
 
     override fun getItemCount(): Int = items.size
 
-    private var recycler: RecyclerView? = null
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView?) {
         super.onAttachedToRecyclerView(recyclerView)
         this.recycler = recyclerView
@@ -49,20 +57,19 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
         this.recycler = null
     }
 
-    var paginatorProcessed: Boolean = false
-    private val scrollListener by lazy { ScrollListener(this) }
-
-    internal fun processPagination(direction: PagieDirection?) {
-        if (direction != null && !paginatorProcessed && paginator != null) {
+    internal fun processPagination(direction: PagieDirection) {
+        if (!paginatorProcessed) {
             when (direction) {
-                PagieDirection.START -> {
-                    paginatorProcessed = true
-                    paginator?.loadStart { finishLoad(direction, it) }
-                }
-                PagieDirection.END -> {
-                    paginatorProcessed = true
-                    paginator?.loadEnd { finishLoad(direction, it) }
-                }
+                PagieDirection.START ->
+                    startPaginator?.let { func ->
+                        paginatorProcessed = true
+                        func.invoke { finishLoad(direction, it) }
+                    }
+                PagieDirection.END ->
+                    endPaginator?.let { func ->
+                        paginatorProcessed = true
+                        func.invoke { finishLoad(direction, it) }
+                    }
                 else -> {
                 }
             }
@@ -89,6 +96,12 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
 
 fun RecyclerAdapter.search(func: (IRecyclerHolder) -> Boolean) = items.find { func(it) }
 fun RecyclerAdapter.indexOf(func: (IRecyclerHolder) -> Boolean) = items.indexOfFirst { func(it) }
+
+fun RecyclerAdapter.update(element: Pair<Int, View.() -> Unit>, oldElement: Pair<Int, View.() -> Unit>) {
+    items.find { it.getType() == oldElement.first && it.bindMethod == oldElement.second }?.let {
+        update(RecyclerHolder(element.first, element.second), it)
+    }
+}
 
 fun RecyclerAdapter.update(element: IRecyclerHolder, oldElement: IRecyclerHolder) {
     items.indexOf(oldElement).let { update(element, it) }

@@ -35,6 +35,9 @@ class MultiRecycler : RecyclerView {
         val direction = a.getInt(R.styleable.MultiRecycler_direction, 0)
         val cells = a.getInt(R.styleable.MultiRecycler_cells, 1)
         val reverse = a.getBoolean(R.styleable.MultiRecycler_reverse, false)
+        val sensitive = a.getInt(R.styleable.MultiRecycler_pagination_sensitive, 1)
+
+        adapter.paginationSensitive = sensitive
 
         when (direction) {
             1 -> setVertical(cells, reverse)

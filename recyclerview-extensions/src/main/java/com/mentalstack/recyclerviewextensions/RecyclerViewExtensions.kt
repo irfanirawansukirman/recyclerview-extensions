@@ -25,9 +25,9 @@ private fun RecyclerView.attachLayout(direction: Int, elementsInRow: Int, revers
     setHasFixedSize(true)
 }
 
-fun RecyclerView.getDirection() =
-        (layoutManager as? LinearLayoutManager)?.layoutDirection ?:
-                (layoutManager as? GridLayoutManager)?.layoutDirection
+fun RecyclerView.getOrientation() =
+        (layoutManager as? LinearLayoutManager)?.orientation ?:
+                (layoutManager as? GridLayoutManager)?.orientation
 
 fun RecyclerView.getVisibleIndexes(): Pair<Int, Int>? {
     return (layoutManager as? LinearLayoutManager)?.let {

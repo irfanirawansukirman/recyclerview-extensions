@@ -16,15 +16,72 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
             if (value > 1) field = value
         }
 
-    var startPaginator: (((List<IRecyclerHolder>) -> Unit) -> Unit)? = null
-    var endPaginator: (((List<IRecyclerHolder>) -> Unit) -> Unit)? = null
+    var startPaginator: (((List<IRecyclerHolder>?) -> Unit) -> Unit)? = null
+    var endPaginator: (((List<IRecyclerHolder>?) -> Unit) -> Unit)? = null
 
     private var paginatorProcessed: Boolean = false
-    private val scrollListener by lazy { ScrollListener(this) }
+    private val scrollListener = ScrollListener(this)
 
     private var recycler: RecyclerView? = null
 
-    internal val items = mutableListOf<IRecyclerHolder>()
+    private val items = mutableListOf<IRecyclerHolder>()
+
+    //--------------------------------------------
+    //
+    // Interface methods
+    //
+    //---------------------------------------------
+
+    fun search(func: (IRecyclerHolder) -> Boolean) = items.find { func(it) }
+    fun indexOf(func: (IRecyclerHolder) -> Boolean) = items.indexOfFirst { func(it) }
+
+    fun update(element: Pair<Int, View.() -> Unit>, oldElement: Pair<Int, View.() -> Unit>) {
+        items.find { it.getType() == oldElement.first && it.bindMethod == oldElement.second }?.let {
+            update(RecyclerHolder(element.first, element.second), it)
+        }
+    }
+
+    fun update(element: IRecyclerHolder, oldElement: IRecyclerHolder) {
+        items.indexOf(oldElement).let { update(element, it) }
+    }
+
+    fun update(element: IRecyclerHolder, index: Int) {
+        items[index] = element
+        notifyItemChanged(index)
+    }
+
+    fun add(value: Pair<Int, View.() -> Unit>) = add(RecyclerHolder(value.first, value.second))
+    fun add(type: Int, method: View.() -> Unit) = add(RecyclerHolder(type, method))
+    fun add(element: IRecyclerHolder) {
+        items.add(element)
+        notifyItemChanged(items.size - 1)
+    }
+    
+    fun addPairs(list: List<Pair<Int, View.() -> Unit>>) = addAll(list.map { RecyclerHolder(it.first, it.second) })
+    fun addAll(elements: List<IRecyclerHolder>) {
+        items.addAll(elements)
+        notifyItemRangeChanged(items.size - elements.size - 1, elements.size)
+    }
+
+    fun remove(index: Int) {
+        if (index > 0) {
+            items.removeAt(index)
+            notifyItemRemoved(index)
+        }
+    }
+
+    fun remove(element: IRecyclerHolder) = items.indexOf(element).let { remove(it) }
+    fun remove(element: Pair<Int, View.() -> Unit>) {
+        items.indexOfFirst {
+            it.getType() == element.first && it.bindMethod == element.second
+        }.let { remove(it) }
+    }
+
+    fun clear() = items.clear()
+
+    //--------------------------------------------
+    //
+    //--------------------------------------------
 
     override fun onBindViewHolder(holder: AbstractViewHolder?, position: Int) {
         val item = items.getOrNull(position) ?: throw Exception("bounds of list")
@@ -59,20 +116,13 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
 
     internal fun processPagination(direction: PagieDirection) {
         if (!paginatorProcessed) {
-            when (direction) {
-                PagieDirection.START ->
-                    startPaginator?.let { func ->
-                        paginatorProcessed = true
-                        func.invoke { finishLoad(direction, it) }
-                    }
-                PagieDirection.END ->
-                    endPaginator?.let { func ->
-                        paginatorProcessed = true
-                        func.invoke { finishLoad(direction, it) }
-                    }
-                else -> {
-                }
-            }
+            val func = when (direction) {
+                PagieDirection.START -> startPaginator
+                PagieDirection.END -> endPaginator
+            } ?: return
+
+            paginatorProcessed = true
+            func.invoke { finishLoad(direction, it) }
         }
     }
 
@@ -87,59 +137,5 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
         paginatorProcessed = false
     }
 }
-
-//--------------------------------------------
-//
-// Interface methods
-//
-//---------------------------------------------
-
-fun RecyclerAdapter.search(func: (IRecyclerHolder) -> Boolean) = items.find { func(it) }
-fun RecyclerAdapter.indexOf(func: (IRecyclerHolder) -> Boolean) = items.indexOfFirst { func(it) }
-
-fun RecyclerAdapter.update(element: Pair<Int, View.() -> Unit>, oldElement: Pair<Int, View.() -> Unit>) {
-    items.find { it.getType() == oldElement.first && it.bindMethod == oldElement.second }?.let {
-        update(RecyclerHolder(element.first, element.second), it)
-    }
-}
-
-fun RecyclerAdapter.update(element: IRecyclerHolder, oldElement: IRecyclerHolder) {
-    items.indexOf(oldElement).let { update(element, it) }
-}
-
-fun RecyclerAdapter.update(element: IRecyclerHolder, index: Int) {
-    items[index] = element
-    notifyItemChanged(index)
-}
-
-fun RecyclerAdapter.add(element: IRecyclerHolder) {
-    items.add(element)
-    notifyItemChanged(items.size - 1)
-}
-
-fun RecyclerAdapter.add(value: Pair<Int, View.() -> Unit>) = add(RecyclerHolder(value.first, value.second))
-fun RecyclerAdapter.add(type: Int, method: View.() -> Unit) = add(RecyclerHolder(type, method))
-
-fun RecyclerAdapter.addAll(elements: List<IRecyclerHolder>) {
-    items.addAll(elements)
-    notifyItemRangeChanged(items.size - elements.size - 1, elements.size)
-}
-
-fun RecyclerAdapter.addPairs(list: List<Pair<Int, View.() -> Unit>>) = addAll(list.map { RecyclerHolder(it.first, it.second) })
-fun RecyclerAdapter.remove(index: Int) {
-    if (index > 0) {
-        items.removeAt(index)
-        notifyItemRemoved(index)
-    }
-}
-
-fun RecyclerAdapter.remove(element: RecyclerHolder) = items.indexOf(element).let { remove(it) }
-fun RecyclerAdapter.remove(element: Pair<Int, View.() -> Unit>) = items.indexOfFirst {
-    it.getType() == element.first && it.bindMethod == element.second
-}.let { remove(it) }
-
-
-fun RecyclerAdapter.clear() = items.clear()
-
 
 class AbstractViewHolder(val type: Int, view: View) : RecyclerView.ViewHolder(view)

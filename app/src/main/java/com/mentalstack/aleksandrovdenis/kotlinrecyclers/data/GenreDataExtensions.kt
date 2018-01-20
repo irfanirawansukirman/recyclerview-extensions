@@ -13,24 +13,30 @@ import kotlinx.android.synthetic.main.layout_genre_cell_2.view.*
  */
 fun GenreData.constructViewCell2() = RecyclerHolder(R.layout.layout_genre_cell_2,
         {
-            cell2_title.text = title
-            cell2_title.setTextColor(Color.BLACK)
-            cell2_icon.setImageResource(context.getIconID(icon))
-            cell2_cont.setBackgroundColor(Color.parseColor(rawColor))
+            it.apply {
+                cell2_title.text = title
+                cell2_title.setTextColor(Color.BLACK)
+                cell2_icon.setImageResource(context.getIconID(icon))
+                cell2_cont.setBackgroundColor(Color.parseColor(rawColor))
+            }
         }) as IRecyclerHolder
 
-fun GenreData2.constructViewCell1() = Pair<Int, View.() -> Unit>(R.layout.layout_genre_cell_1,
+fun GenreData2.constructViewCell1() = Pair<Int, (View) -> Unit>(R.layout.layout_genre_cell_1,
         {
-            cell1_title.text = title
-            cell1_icon.setImageResource(context.getIconID(icon))
-            cell1_title.setTextColor(Color.parseColor(rawColor))
-            cell1_cont.setBackgroundColor(Color.WHITE)
+            it.apply {
+                cell1_title.text = title
+                cell1_icon.setImageResource(context.getIconID(icon))
+                cell1_title.setTextColor(Color.parseColor(rawColor))
+                cell1_cont.setBackgroundColor(Color.WHITE)
+            }
         })
 
 fun GenreData2.constructViewCell2() = RecyclerHolder(R.layout.layout_genre_cell_2,
         {
-            cell2_title.text = title
-            cell2_icon.setImageResource(context.getIconID(icon))
-            cell2_title.setTextColor(Color.parseColor(rawColor))
-            cell2_cont.setBackgroundColor(Color.WHITE)
+            it.apply {
+                cell2_title.text = title
+                cell2_icon.setImageResource(context.getIconID(icon))
+                cell2_title.setTextColor(Color.parseColor(rawColor))
+                cell2_cont.setBackgroundColor(Color.WHITE)
+            }
         })

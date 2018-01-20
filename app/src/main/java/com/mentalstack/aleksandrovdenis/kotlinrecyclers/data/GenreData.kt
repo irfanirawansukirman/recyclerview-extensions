@@ -10,14 +10,16 @@ import kotlinx.android.synthetic.main.layout_genre_cell_1.view.*
  * Created by aleksandrovdenis on 13.01.2018.
  */
 class GenreData : IRecyclerHolder {
-    override val bindMethod: View.() -> Unit = {
-        cell1_title.text = title
-        cell1_icon.setImageResource(context.getIconID(icon))
-        cell1_title.setTextColor(Color.BLACK)
-        cell1_cont.setBackgroundColor(Color.parseColor(rawColor))
+    override val bindMethod: (View) -> Unit = {
+        it.apply {
+            cell1_title.text = title
+            cell1_icon.setImageResource(context.getIconID(icon))
+            cell1_title.setTextColor(Color.BLACK)
+            cell1_cont.setBackgroundColor(Color.parseColor(rawColor))
+        }
     }
 
-    override fun getType(): Int = R.layout.layout_genre_cell_1
+    override val layoutType: Int = R.layout.layout_genre_cell_1
 
     val icon: String
     val title: String

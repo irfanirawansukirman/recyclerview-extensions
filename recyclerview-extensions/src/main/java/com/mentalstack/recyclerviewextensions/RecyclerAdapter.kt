@@ -36,7 +36,7 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
     fun indexOf(func: (IRecyclerHolder) -> Boolean) = items.indexOfFirst { func(it) }
 
     fun update(element: Pair<Int, View.() -> Unit>, oldElement: Pair<Int, View.() -> Unit>) {
-        items.find { it.getType() == oldElement.first && it.bindMethod == oldElement.second }?.let {
+        items.find { it.layoutType == oldElement.first && it.bindMethod == oldElement.second }?.let {
             update(RecyclerHolder(element.first, element.second), it)
         }
     }
@@ -73,7 +73,7 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
     fun remove(element: IRecyclerHolder) = items.indexOf(element).let { remove(it) }
     fun remove(element: Pair<Int, View.() -> Unit>) {
         items.indexOfFirst {
-            it.getType() == element.first && it.bindMethod == element.second
+            it.layoutType == element.first && it.bindMethod == element.second
         }.let { remove(it) }
     }
 
@@ -85,14 +85,14 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
 
     override fun onBindViewHolder(holder: AbstractViewHolder?, position: Int) {
         val item = items.getOrNull(position) ?: throw Exception("bounds of list")
-        if (holder?.type != item.getType()) throw Exception("unsupported type holder/item")
+        if (holder?.type != item.layoutType) throw Exception("unsupported type holder/item")
         val view = holder?.itemView ?: throw Exception("holder is null")
 
         item.bindMethod.invoke(view)
     }
 
     override fun getItemViewType(position: Int): Int {
-        return items.getOrNull(position)?.getType() ?: throw Exception("bounds of list")
+        return items.getOrNull(position)?.layoutType ?: throw Exception("bounds of list")
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): AbstractViewHolder {

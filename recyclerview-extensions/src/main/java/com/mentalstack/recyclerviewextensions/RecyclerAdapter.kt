@@ -16,8 +16,17 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
             if (value > 1) field = value
         }
 
-    var startPaginator: (((List<IRecyclerHolder>?) -> Unit) -> Unit)? = null
+    private var startPaginator: (((List<IRecyclerHolder>?) -> Unit) -> Unit)? = null
+        set(value) {
+            field = value
+            afterPaginatorAdded(PagieDirection.START)
+        }
+
     var endPaginator: (((List<IRecyclerHolder>?) -> Unit) -> Unit)? = null
+        set(value) {
+            field = value
+            afterPaginatorAdded(PagieDirection.END)
+        }
 
     private var paginatorProcessed: Boolean = false
     private val scrollListener = ScrollListener(this)
@@ -35,7 +44,7 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
     fun search(func: (IRecyclerHolder) -> Boolean) = items.find { func(it) }
     fun indexOf(func: (IRecyclerHolder) -> Boolean) = items.indexOfFirst { func(it) }
 
-    fun update(element: Pair<Int, View.() -> Unit>, oldElement: Pair<Int, View.() -> Unit>) {
+    fun update(element: Pair<Int, (View) -> Unit>, oldElement: Pair<Int, (View) -> Unit>) {
         items.find { it.layoutType == oldElement.first && it.bindMethod == oldElement.second }?.let {
             update(RecyclerHolder(element.first, element.second), it)
         }
@@ -50,14 +59,14 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
         notifyItemChanged(index)
     }
 
-    fun add(value: Pair<Int, View.() -> Unit>) = add(RecyclerHolder(value.first, value.second))
-    fun add(type: Int, method: View.() -> Unit) = add(RecyclerHolder(type, method))
+    fun add(value: Pair<Int, (View) -> Unit>) = add(RecyclerHolder(value.first, value.second))
+    fun add(type: Int, method: (View) -> Unit) = add(RecyclerHolder(type, method))
     fun add(element: IRecyclerHolder) {
         items.add(element)
         notifyItemChanged(items.size - 1)
     }
 
-    fun addPairs(list: List<Pair<Int, View.() -> Unit>>) = addAll(list.map { RecyclerHolder(it.first, it.second) })
+    fun addPairs(list: List<Pair<Int, (View) -> Unit>>) = addAll(list.map { RecyclerHolder(it.first, it.second) })
     fun addAll(elements: List<IRecyclerHolder>) {
         items.addAll(elements)
         notifyItemRangeChanged(items.size - elements.size - 1, elements.size)
@@ -71,7 +80,7 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
     }
 
     fun remove(element: IRecyclerHolder) = items.indexOf(element).let { remove(it) }
-    fun remove(element: Pair<Int, View.() -> Unit>) {
+    fun remove(element: Pair<Int, (View) -> Unit>) {
         items.indexOfFirst {
             it.layoutType == element.first && it.bindMethod == element.second
         }.let { remove(it) }
@@ -124,6 +133,10 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
             paginatorProcessed = true
             func.invoke { finishLoad(direction, it) }
         }
+    }
+
+    private fun afterPaginatorAdded(direction: PagieDirection) {
+        if (items.isEmpty()) processPagination(direction)
     }
 
     private fun finishLoad(direction: PagieDirection, newItems: List<IRecyclerHolder>?) {

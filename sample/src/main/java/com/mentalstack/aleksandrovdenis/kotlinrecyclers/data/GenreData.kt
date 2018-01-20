@@ -25,9 +25,9 @@ class GenreData : IRecyclerHolder {
     val title: String
     val rawColor: String
 
-    constructor(obj: Map<String, Any>) {
+    constructor(obj: Map<String, Any>, testCounter: Int? = null) {
         icon = (obj["icon"] as? String) ?: ""
-        title = (obj["title"] as? String) ?: ""
+        title = ((obj["title"] as? String) ?: "") + (testCounter?.toString() ?: "")
         rawColor = (obj["color"] as? String) ?: ""
     }
 

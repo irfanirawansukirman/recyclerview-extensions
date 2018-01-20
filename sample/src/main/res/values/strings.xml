@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Kotlin Recyclers demo</string>
+    <string name="multirecycler">MultiRecycler</string>
+    <string name="no_classes_rec">Recycler without commons</string>
+    <string name="one_way_paginator">One-way paginator</string>
+    <string name="two_way_paginator">Two-way paginator</string>
+</resources>

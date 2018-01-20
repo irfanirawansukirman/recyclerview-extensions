@@ -8,7 +8,7 @@ import java.io.IOException
 /**
  * Created by aleksandrovdenis on 13.01.2018.
  */
-fun loadJSON(context: Context, path: String): String? {
+private fun loadJSON(context: Context, path: String): String? {
     return try {
         val `is` = context.assets.open(path)
         val size = `is`.available()
@@ -23,7 +23,7 @@ fun loadJSON(context: Context, path: String): String? {
 }
 
 private val gson by lazy { GsonBuilder().setPrettyPrinting().create() }
-fun parseString(str: String): Map<String, Any>? {
+private fun parseString(str: String): Map<String, Any>? {
     return try {
         gson.fromJson(str, object : TypeToken<Map<String, Any>>() {}.type)
     } catch (e: Exception) {
@@ -31,4 +31,19 @@ fun parseString(str: String): Map<String, Any>? {
     }
 }
 
+lateinit var listData: List<Map<String, Any>>
+    private set
+
 fun Context.getIconID(name: String) = resources.getIdentifier(name, "drawable", packageName)
+
+fun loadData(baseContext: Context): Boolean {
+    loadJSON(baseContext, "music_genres.json")?.let { rawString ->
+        parseString(rawString)?.let { rawObj ->
+            (rawObj["objects"] as? List<Map<String, Any>>)?.let {
+                listData = it
+                return true
+            }
+        }
+    }
+    return false
+}

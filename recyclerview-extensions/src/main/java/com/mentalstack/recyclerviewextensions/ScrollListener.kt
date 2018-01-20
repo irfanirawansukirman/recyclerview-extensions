@@ -51,7 +51,7 @@ internal class ScrollListener(private val adapter: RecyclerAdapter) : RecyclerVi
                     { it < adapter.paginationSensitive } ?: false ->
                         PagieDirection.START
                     delta > 0 && recycler.lastVisibleIndex()?.let
-                    { it > adapter.itemCount - adapter.paginationSensitive } ?: false ->
+                    { it > adapter.itemCount - adapter.paginationSensitive-1 } ?: false ->
                         PagieDirection.END
                     else -> null
                 }

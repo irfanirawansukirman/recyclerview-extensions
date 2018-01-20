@@ -16,6 +16,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".MultiRecyclerActivity"
+            android:noHistory="true" />
+
+        <activity
+            android:name=".NoClassesActivity"
+            android:noHistory="true" />
+
+        <activity
+            android:name=".OneWayActivity"
+            android:noHistory="true" />
     </application>
 
 </manifest>

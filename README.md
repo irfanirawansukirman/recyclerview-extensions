@@ -5,5 +5,11 @@ RecyclerView Extensions, Mentalstack
 
 <h2>Recycler Adapter</h2>
 <p>Can show any elements. Easy and fast.</p>
-<p>Simple, add pair of layout resource and View.()->Unit method from processing view. Thats all!</p>
-<p>Add different pairs and lists. Add any data types. Add all.</p>
+```kotlin
+val adapter = RecyclerAdapter()
+recycler.adapter = adapter
+add( R.layout.layout_cell_1 to { view ->
+    //modify view as you wish
+})
+```
+

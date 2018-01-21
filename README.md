@@ -69,3 +69,8 @@ class GenreDataPaginator : OneWayPaginator() {
 //------------------------------------------
   GenreDataPaginator().attachTo(multi_recycler.adapter)
 ```
+
+## Next version
+ - two-way pagination (end and start)
+ - custom common elements - preloader, error and end of list holders
+ - replace method from update elements.

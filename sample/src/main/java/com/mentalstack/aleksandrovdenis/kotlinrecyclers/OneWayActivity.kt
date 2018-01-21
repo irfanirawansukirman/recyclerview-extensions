@@ -19,7 +19,6 @@ class OneWayActivity : Activity() {
         toolbar_title.setText(R.string.no_classes_rec)
         toolbar_back.setOnClickListener { finish() }
 
-        val paginator = GenreDataPaginator()
         GenreDataPaginator().attachTo(multi_recycler.adapter)
     }
 }

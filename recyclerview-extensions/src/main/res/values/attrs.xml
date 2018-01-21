@@ -9,5 +9,10 @@
         <attr name="pagination_sensitive" format="integer" />
         <attr name="reverse" format="boolean" />
         <attr name="cells" format="integer" />
+
+        <attr name="cell_preloader" format="reference" />
+        <attr name="cell_error" format="reference" />
+        <attr name="cell_end" format="reference" />
+
     </declare-styleable>
 </resources>

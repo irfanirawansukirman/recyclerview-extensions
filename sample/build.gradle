@@ -1,7 +1,5 @@
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
 
 android {
@@ -20,6 +18,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    buildToolsVersion '26.0.2'
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 def supportLibrary = "26.1.0"
 
@@ -34,6 +37,5 @@ dependencies {
     implementation "com.android.support:appcompat-v7:${supportLibrary}"
     implementation "com.android.support:recyclerview-v7:${supportLibrary}"
     implementation project(':recyclerview-extensions')
-
     compile 'com.google.code.gson:gson:2.8.2'
 }

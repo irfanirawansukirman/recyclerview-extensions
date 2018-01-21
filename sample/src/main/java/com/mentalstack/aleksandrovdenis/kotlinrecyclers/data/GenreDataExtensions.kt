@@ -7,6 +7,7 @@ import com.mentalstack.recyclerviewextensions.IRecyclerHolder
 import com.mentalstack.recyclerviewextensions.RecyclerHolder
 import kotlinx.android.synthetic.main.layout_genre_cell_1.view.*
 import kotlinx.android.synthetic.main.layout_genre_cell_2.view.*
+import kotlinx.android.synthetic.main.layout_genre_cell_3.view.*
 
 /**
  * Created by aleksandrovdenis on 13.01.2018.
@@ -40,3 +41,14 @@ fun GenreData2.constructViewCell2() = RecyclerHolder(R.layout.layout_genre_cell_
                 cell2_cont.setBackgroundColor(Color.WHITE)
             }
         })
+
+fun GenreData2.constructViewCell3() = Pair<Int, (View) -> Unit>(R.layout.layout_genre_cell_3,
+        {
+            it.apply {
+                cell3_title.text = title
+                cell3_icon.setImageResource(context.getIconID(icon))
+                cell3_title.setTextColor(Color.parseColor(rawColor))
+                cell3_cont.setBackgroundColor(Color.WHITE)
+            }
+        })
+

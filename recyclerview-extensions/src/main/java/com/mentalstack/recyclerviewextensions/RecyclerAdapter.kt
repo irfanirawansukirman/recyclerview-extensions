@@ -11,6 +11,33 @@ import org.jetbrains.anko.runOnUiThread
  */
 class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
 
+    private var preloader: IRecyclerHolder? = null
+    fun setPreloader(value: IRecyclerHolder) {
+        this.preloader = value
+    }
+
+    fun setPreloader(value: Int) {
+        this.preloader = RecyclerHolderLayoutOnly(value)
+    }
+
+    private var error: IRecyclerHolder? = null
+    fun setError(value: IRecyclerHolder) {
+        this.error = value
+    }
+
+    fun setError(value: Int) {
+        this.error = RecyclerHolderLayoutOnly(value)
+    }
+
+    private var endList: IRecyclerHolder? = null
+    fun setEndList(value: IRecyclerHolder) {
+        endList = value
+    }
+
+    fun setEndList(value: Int) {
+        endList = RecyclerHolderLayoutOnly(value)
+    }
+
     var paginationSensitive = 1
         set(value) {
             if (value > 1) field = value

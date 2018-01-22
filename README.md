@@ -1,6 +1,7 @@
 # RecyclerView extensions
 RecyclerView Extensions by Kotlin, Mentalstack
-<img src="https://github.com/mentalstack/recyclerview-extensions/blob/master/device-2018-01-13-162829.gif" width="200"/>
+
+<img src="https://github.com/mentalstack/recyclerview-extensions/blob/master/example.gif" width="320"/>
 ## Recycler Adapter
 Can show any elements. Easy and fast.
 ```kotlin

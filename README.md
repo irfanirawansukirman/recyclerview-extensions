@@ -2,6 +2,7 @@
 RecyclerView Extensions by Kotlin, Mentalstack
 
 <img src="https://github.com/mentalstack/recyclerview-extensions/blob/master/example.gif" width="320"/>
+
 ## Recycler Adapter
 Can show any elements. Easy and fast.
 ```kotlin
@@ -10,6 +11,7 @@ recycler.adapter = adapter add( R.layout.layout_cell_1 to { view ->
 	//modify view as you wish 
 }) 
 ```
+
 or use another methods:
 ```kotlin
 fun add(value: Pair<Int, (View) -> Unit>)

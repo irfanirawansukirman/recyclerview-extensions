@@ -11,31 +11,25 @@ import org.jetbrains.anko.runOnUiThread
  */
 class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
 
+    var listener: RecyclerListener? = null
+
     private var preloader: IRecyclerHolder? = null
+
+    fun setPreloader(value: Int) = setPreloader(RecyclerHolderLayoutOnly(value))
     fun setPreloader(value: IRecyclerHolder) {
         this.preloader = value
     }
 
-    fun setPreloader(value: Int) {
-        this.preloader = RecyclerHolderLayoutOnly(value)
-    }
-
     private var error: IRecyclerHolder? = null
+    fun setError(value: Int) = setError(RecyclerHolderLayoutOnly(value))
     fun setError(value: IRecyclerHolder) {
         this.error = value
     }
 
-    fun setError(value: Int) {
-        this.error = RecyclerHolderLayoutOnly(value)
-    }
-
     private var endList: IRecyclerHolder? = null
+    fun setEndList(value: Int) = setEndList(RecyclerHolderLayoutOnly(value))
     fun setEndList(value: IRecyclerHolder) {
         endList = value
-    }
-
-    fun setEndList(value: Int) {
-        endList = RecyclerHolderLayoutOnly(value)
     }
 
     var paginationSensitive = 1
@@ -46,13 +40,13 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
     private var startPaginator: (((List<IRecyclerHolder>?) -> Unit) -> Unit)? = null
         set(value) {
             field = value
-            afterPaginatorAdded(PagieDirection.START)
+            afterPaginatorAdded(PaginatorDirection.START)
         }
 
     var endPaginator: (((List<IRecyclerHolder>?) -> Unit) -> Unit)? = null
         set(value) {
             field = value
-            afterPaginatorAdded(PagieDirection.END)
+            afterPaginatorAdded(PaginatorDirection.END)
         }
 
     private var paginatorProcessed: Boolean = false
@@ -90,7 +84,7 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
     fun add(type: Int, method: (View) -> Unit) = add(RecyclerHolder(type, method))
     fun add(element: IRecyclerHolder) {
         items.add(element)
-        notifyItemChanged(items.size - 1)
+        notifyItemInserted(items.size - 1)
     }
 
     fun addPairs(list: List<Pair<Int, (View) -> Unit>>) = addAll(list.map { RecyclerHolder(it.first, it.second) })
@@ -100,7 +94,7 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
     }
 
     fun remove(index: Int) {
-        if (index > 0) {
+        if (index >= 0) {
             items.removeAt(index)
             notifyItemRemoved(index)
         }
@@ -150,31 +144,69 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
         this.recycler = null
     }
 
-    internal fun processPagination(direction: PagieDirection) {
+    internal fun processPagination(direction: PaginatorDirection) {
         if (!paginatorProcessed) {
             val func = when (direction) {
-                PagieDirection.START -> startPaginator
-                PagieDirection.END -> endPaginator
+                PaginatorDirection.START -> startPaginator
+                PaginatorDirection.END -> endPaginator
             } ?: return
 
-            paginatorProcessed = true
-            func.invoke { finishLoad(direction, it) }
+            safety {
+                paginatorProcessed = true
+                listener?.onLoadStarted(direction)
+                error?.let { remove(it) }
+                endList?.let { remove(it) }
+                preloader?.commonAdd(direction)
+                func.invoke { finishLoad(direction, it) }
+            }
         }
     }
 
-    private fun afterPaginatorAdded(direction: PagieDirection) {
+    private fun afterPaginatorAdded(direction: PaginatorDirection) {
         if (items.isEmpty()) processPagination(direction)
     }
 
-    private fun finishLoad(direction: PagieDirection, newItems: List<IRecyclerHolder>?) {
+    private fun finishLoad(direction: PaginatorDirection, newItems: List<IRecyclerHolder>?) {
         newItems?.let {
-            val index = if (direction == PagieDirection.START) 0 else items.size
+            val index = if (direction == PaginatorDirection.START) 0 else items.size
             items.addAll(index, it)
-            recycler?.context?.runOnUiThread {
-                notifyDataSetChanged()
-            }
+            safety { notifyDataSetChanged() }
         }
         paginatorProcessed = false
+
+        safety {
+            preloader?.let {
+                print("test")
+                remove(it)
+            }
+            if (newItems == null) {
+                listener?.onLoadEnded(direction)
+                listener?.onLoadError(direction)
+                error?.commonAdd(direction)
+            } else {
+                listener?.onLoadEnded(direction)
+                if (newItems.isEmpty())
+                    endList?.commonAdd(direction)
+            }
+        }
+    }
+
+    private fun IRecyclerHolder.commonAdd(direction: PaginatorDirection) {
+        if (items.contains(this)) {
+            remove(this)
+        }
+
+        val position = when (direction) {
+            PaginatorDirection.START -> 0
+            PaginatorDirection.END -> items.size
+        }
+        items.add(position, this)
+        notifyItemInserted(position)
+
+    }
+
+    private fun safety(method: () -> Unit) {
+        recycler?.context?.runOnUiThread { method() }
     }
 }
 

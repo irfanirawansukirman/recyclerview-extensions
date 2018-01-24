@@ -7,7 +7,7 @@ import android.widget.LinearLayout
  * Created by aleksandrovdenis on 15.01.2018.
  */
 
-internal enum class PagieDirection { START, END }
+enum class PaginatorDirection { START, END }
 
 internal class ScrollListener(private val adapter: RecyclerAdapter) : RecyclerView.OnScrollListener() {
 
@@ -49,10 +49,10 @@ internal class ScrollListener(private val adapter: RecyclerAdapter) : RecyclerVi
                 when {
                     delta < 0 && recycler.firstVibleIndex()?.let
                     { it < adapter.paginationSensitive } ?: false ->
-                        PagieDirection.START
+                        PaginatorDirection.START
                     delta > 0 && recycler.lastVisibleIndex()?.let
                     { it > adapter.itemCount - adapter.paginationSensitive-1 } ?: false ->
-                        PagieDirection.END
+                        PaginatorDirection.END
                     else -> null
                 }
             }

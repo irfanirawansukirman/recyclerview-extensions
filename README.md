@@ -60,6 +60,40 @@ interface IRecyclerHolder {
 Examples contains any ways from use, see it.
 Base implementation: RecyclerHolder, RecyclerHolderLayoutOnly
 
+## Support cells
+```xml
+ <com.mentalstack.recyclerviewextensions.MultiRecycler
+        android:id="@+id/multi_recycler"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:cell_end="@layout/layout_recycler_end"
+        app:cell_error="@layout/layout_recycler_error"
+        app:cell_preloader="@layout/layout_recycler_preloader"
+        app:cells="1"
+        app:direction="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include" />
+```
+- cell_end - optional, showed in end of paginator load
+- cell_error - optional, showed, if paginator returns null
+- cell_preloader - preloader from weiting paginator
+
+Use xml or programmaticaly methods:
+```kotlin
+	multi_recycler.adapter.setPreloader(R.layout.layout_recycler_preloader)
+        // or
+        multi_recycler.adapter.setPreloader( object :IRecyclerHolder{
+            override val layoutType: Int 
+                get() = R.layout.layout_recycler_preloader
+            override val bindMethod: (View) -> Unit
+                get() = {
+                    //modify cell if need
+                }
+        })
+```
+
 ## OneWayPaginator
 Paginator from upload new elements from end.
 override 

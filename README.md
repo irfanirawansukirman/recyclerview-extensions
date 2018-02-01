@@ -3,6 +3,14 @@ RecyclerView Extensions by Kotlin, Mentalstack
 
 <img src="https://github.com/mentalstack/recyclerview-extensions/blob/master/example.gif" width="320"/>
 
+now, available in Jcenter:
+
+```JSON
+compile 'com.mentalstack.android:recyclerview-extensions-kotlin:2.0'
+```
+
+Please, see example - it's really easy!
+
 ## Recycler Adapter
 Can show any elements. Easy and fast.
 ```kotlin
@@ -73,6 +81,11 @@ class GenreDataPaginator : OneWayPaginator() {
   GenreDataPaginator().attachTo(multi_recycler.adapter)
 ```
 
-## Next version
- - two-way pagination (end and start)
- - replace method from update elements.
+## replace method from update elements
+Easiest way to update adapter elements. Call
+```kotlin
+scroller.adapter.merge( newList, awesomeQualsFunc, restDirection)
+```
+ - newslist = list of new or updated elements
+ - awesomeQualsFunc = method from comparing elements
+ - restDirection = set way to add new elements (or null, if you want skip it)

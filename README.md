@@ -9,6 +9,8 @@ now, available in Jcenter:
 compile 'com.mentalstack.android:recyclerview-extensions-kotlin:2.0'
 ```
 
+Please, see example - it's really easy!
+
 ## Recycler Adapter
 Can show any elements. Easy and fast.
 ```kotlin

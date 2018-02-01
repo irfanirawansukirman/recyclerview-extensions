@@ -32,6 +32,9 @@ class MainActivity : AppCompatActivity() {
                 add(constructCell(R.string.two_way_paginator, {
                     switchTo(TwoWayActivity::class.java)
                 }))
+                add(constructCell(R.string.merge, {
+                    switchTo(MergeActivity::class.java)
+                }))
             }
         }
 

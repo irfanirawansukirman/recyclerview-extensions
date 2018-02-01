@@ -4,4 +4,5 @@
     <string name="no_classes_rec">Recycler without commons</string>
     <string name="one_way_paginator">One-way paginator</string>
     <string name="two_way_paginator">Two-way paginator</string>
+    <string name="merge">Merge test</string>
 </resources>

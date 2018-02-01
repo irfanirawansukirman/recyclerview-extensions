@@ -109,6 +109,34 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
 
     fun clear() = items.clear()
 
+    fun merge(
+            mergeditems: List<IRecyclerHolder>,
+            mergeFunc: (IRecyclerHolder, IRecyclerHolder) -> Boolean,
+            addRestDirection: PaginatorDirection? = PaginatorDirection.END) {
+
+        val notMergetItems = mutableListOf<IRecyclerHolder>()
+
+        mergeditems.forEach { currItem ->
+            items.firstOrNull { mergeFunc(currItem, it) }?.let { foundedItem ->
+                val pos = items.indexOf(foundedItem)
+                items[pos] = currItem
+            } ?: notMergetItems.add(currItem)
+        }
+
+        addRestDirection?.let {
+            val position = when (it) {
+                PaginatorDirection.START -> 0
+                PaginatorDirection.END -> items.size
+            }
+            items.addAll(position, notMergetItems)
+        }
+
+        safety {
+            notifyDataSetChanged()
+        }
+
+    }
+
     //--------------------------------------------
     //
     //--------------------------------------------

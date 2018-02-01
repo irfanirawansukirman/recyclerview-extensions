@@ -31,6 +31,10 @@
         <activity
             android:name=".TwoWayActivity"
             android:noHistory="true" />
+
+        <activity
+            android:name=".MergeActivity"
+            android:noHistory="true" />
     </application>
 
 </manifest>

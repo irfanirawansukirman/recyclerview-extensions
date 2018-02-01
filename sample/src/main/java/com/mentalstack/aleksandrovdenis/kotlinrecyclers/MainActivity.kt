@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
-import android.widget.Toast
 import com.mentalstack.aleksandrovdenis.kotlinrecyclers.data.loadData
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.layout_main_cell.view.*
@@ -31,7 +30,7 @@ class MainActivity : AppCompatActivity() {
                     switchTo(OneWayActivity::class.java)
                 }))
                 add(constructCell(R.string.two_way_paginator, {
-                    Toast.makeText(this@MainActivity, "coming soon", Toast.LENGTH_LONG).show()
+                    switchTo(TwoWayActivity::class.java)
                 }))
             }
         }

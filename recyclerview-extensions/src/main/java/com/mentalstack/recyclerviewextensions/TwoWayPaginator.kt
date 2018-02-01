@@ -3,12 +3,12 @@ package com.mentalstack.recyclerviewextensions
 /**
  * Created by aleksandrovdenis on 20.01.2018.
  */
-private abstract class TwoWayPaginator {
-    abstract fun loadEnd(onComplete: (List<IRecyclerHolder>?) -> Unit)
-    abstract fun loadStart(onComplete: (List<IRecyclerHolder>?) -> Unit)
+abstract class TwoWayPaginator {
+    abstract val loadEnd:(((List<IRecyclerHolder>?) -> Unit)->Unit)
+    abstract val loadStart:(((List<IRecyclerHolder>?) -> Unit)->Unit)
 
     fun attachTo(adapter: RecyclerAdapter) {
-   //     adapter.endPaginator = this::loadEnd
-   //     adapter.startPaginator = this::loadStart
+        adapter.endPaginator = loadEnd
+        adapter.startPaginator = loadStart
     }
 }

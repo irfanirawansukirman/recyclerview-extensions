@@ -37,7 +37,7 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
             if (value > 1) field = value
         }
 
-    private var startPaginator: (((List<IRecyclerHolder>?) -> Unit) -> Unit)? = null
+    var startPaginator: (((List<IRecyclerHolder>?) -> Unit) -> Unit)? = null
         set(value) {
             field = value
             afterPaginatorAdded(PaginatorDirection.START)
@@ -170,7 +170,12 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
         newItems?.let {
             val index = if (direction == PaginatorDirection.START) 0 else items.size
             items.addAll(index, it)
-            safety { notifyDataSetChanged() }
+            safety {
+                notifyDataSetChanged()
+                if (direction == PaginatorDirection.START) {
+                    recycler?.scrollToTop(newItems.size)
+                }
+            }
         }
         paginatorProcessed = false
 

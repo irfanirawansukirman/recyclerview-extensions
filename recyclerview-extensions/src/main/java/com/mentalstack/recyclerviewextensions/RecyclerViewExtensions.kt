@@ -26,8 +26,8 @@ private fun RecyclerView.attachLayout(direction: Int, elementsInRow: Int, revers
 }
 
 fun RecyclerView.getOrientation() =
-        (layoutManager as? LinearLayoutManager)?.orientation ?:
-                (layoutManager as? GridLayoutManager)?.orientation
+        (layoutManager as? LinearLayoutManager)?.orientation
+                ?: (layoutManager as? GridLayoutManager)?.orientation
 
 fun RecyclerView.getVisibleIndexes(): Pair<Int, Int>? {
     return (layoutManager as? LinearLayoutManager)?.let {
@@ -38,13 +38,30 @@ fun RecyclerView.getVisibleIndexes(): Pair<Int, Int>? {
 }
 
 fun RecyclerView.elementsInRow() =
-        (layoutManager as? LinearLayoutManager)?.let { 1 } ?:
-                (layoutManager as? GridLayoutManager)?.let { it.spanCount }
+        (layoutManager as? LinearLayoutManager)?.let { 1 }
+                ?: (layoutManager as? GridLayoutManager)?.let { it.spanCount }
 
 fun RecyclerView.lastVisibleIndex() =
-        (layoutManager as? LinearLayoutManager)?.findLastVisibleItemPosition() ?:
-                (layoutManager as? GridLayoutManager)?.findLastVisibleItemPosition()
+        (layoutManager as? LinearLayoutManager)?.findLastVisibleItemPosition()
+                ?: (layoutManager as? GridLayoutManager)?.findLastVisibleItemPosition()
 
 fun RecyclerView.firstVibleIndex() =
-        (layoutManager as? LinearLayoutManager)?.findFirstVisibleItemPosition() ?:
-                (layoutManager as? GridLayoutManager)?.findFirstVisibleItemPosition()
+        (layoutManager as? LinearLayoutManager)?.findFirstVisibleItemPosition()
+                ?: (layoutManager as? GridLayoutManager)?.findFirstVisibleItemPosition()
+
+fun RecyclerView.scrollToTop(elementNum: Int) {
+    (layoutManager as? LinearLayoutManager)?.let {
+        val offset = if (it.orientation == LinearLayout.VERTICAL)
+            height
+        else
+            width
+        it.scrollToPositionWithOffset(elementNum, offset)
+    }
+    (layoutManager as? GridLayoutManager)?.let {
+        val offset = if (it.orientation == LinearLayout.VERTICAL)
+            height
+        else
+            width
+        it.scrollToPositionWithOffset(elementNum, offset)
+    }
+}

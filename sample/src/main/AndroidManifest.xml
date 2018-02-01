@@ -27,6 +27,10 @@
         <activity
             android:name=".OneWayActivity"
             android:noHistory="true" />
+
+        <activity
+            android:name=".TwoWayActivity"
+            android:noHistory="true" />
     </application>
 
 </manifest>

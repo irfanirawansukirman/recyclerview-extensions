@@ -1,4 +1,7 @@
 # RecyclerView extensions
+
+latest version - [ ![Download](https://api.bintray.com/packages/mentalstack/android/recyclerview-extensions-kotlin/images/download.svg) ](https://bintray.com/mentalstack/android/recyclerview-extensions-kotlin/_latestVersion)
+
 RecyclerView Extensions by Kotlin, Mentalstack
 
 <img src="https://github.com/mentalstack/recyclerview-extensions/blob/master/example.gif" width="320"/>

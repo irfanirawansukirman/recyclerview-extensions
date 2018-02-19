@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="false"
+        jar="/Users/aleksandrovdenis/Desktop/kotlin/RecyclerExtensions/sample/build/intermediates/transforms/desugar/release/0.jar"
+        jumboMode="false"
+        min-sdk-version="15"
+        optimize="true"
+        revision="26.0.2"
+        sha1="c888fdbb81db45c77eed278985be9e22813110b9">
+        <dex dex="/Users/aleksandrovdenis/Desktop/kotlin/RecyclerExtensions/sample/build/intermediates/transforms/preDex/release/2.jar" />
+    </item>
+
+</items>

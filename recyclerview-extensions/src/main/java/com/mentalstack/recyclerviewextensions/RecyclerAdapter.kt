@@ -90,7 +90,7 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
     fun addPairs(list: List<Pair<Int, (View) -> Unit>>) = addAll(list.map { RecyclerHolder(it.first, it.second) })
     fun addAll(elements: List<IRecyclerHolder>) {
         items.addAll(elements)
-        notifyItemRangeChanged(items.size - elements.size - 1, elements.size)
+        notifyItemRangeInserted(items.size - elements.size, elements.size)
     }
 
     fun remove(index: Int) {
@@ -244,3 +244,4 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
 }
 
 class AbstractViewHolder(val type: Int, view: View) : RecyclerView.ViewHolder(view)
+

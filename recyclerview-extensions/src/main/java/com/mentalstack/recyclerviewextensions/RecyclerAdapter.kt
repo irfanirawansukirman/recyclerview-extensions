@@ -107,7 +107,10 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
         }.let { remove(it) }
     }
 
-    fun clear() = items.clear()
+    fun clear() {
+        items.clear()
+        notifyDataSetChanged()
+    }
 
     fun merge(
             mergeditems: List<IRecyclerHolder>,

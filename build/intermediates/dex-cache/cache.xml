@@ -8,8 +8,18 @@
         min-sdk-version="15"
         optimize="true"
         revision="26.0.2"
-        sha1="c888fdbb81db45c77eed278985be9e22813110b9">
+        sha1="3ad49f6aed3bcdd63a318ff9abda6b1c800b9f6c">
         <dex dex="/Users/aleksandrovdenis/Desktop/kotlin/RecyclerExtensions/sample/build/intermediates/transforms/preDex/release/2.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/aleksandrovdenis/Desktop/kotlin/RecyclerExtensions/sample/build/intermediates/transforms/desugar/release/13.jar"
+        jumboMode="false"
+        min-sdk-version="15"
+        optimize="true"
+        revision="26.0.2"
+        sha1="16789295c786183014c8df7f6e18f1081d379a64">
+        <dex dex="/Users/aleksandrovdenis/Desktop/kotlin/RecyclerExtensions/sample/build/intermediates/transforms/preDex/release/13.jar" />
     </item>
 
 </items>

@@ -4,7 +4,7 @@ apply plugin: 'kotlin-android'
 ext {
     PUBLISH_GROUP_ID = 'com.mentalstack.android'
     PUBLISH_ARTIFACT_ID = 'recyclerview-extensions-kotlin'
-    PUBLISH_VERSION = '2.3'
+    PUBLISH_VERSION = '2.4'
 }
 
 android {

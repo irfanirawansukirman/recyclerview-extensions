@@ -88,8 +88,7 @@ Use xml or programmaticaly methods:
 	multi_recycler.adapter.setPreloader(R.layout.layout_recycler_preloader)
         // or
         multi_recycler.adapter.setPreloader( object :IRecyclerHolder{
-            override val layoutType: Int 
-                get() = R.layout.layout_recycler_preloader
+            override val layoutType: Int = R.layout.layout_recycler_preloader
 	    override fun bindTo(view:View) // modify cell if need
             override val detachFrom(view:View) // remove observers, if need 
         })

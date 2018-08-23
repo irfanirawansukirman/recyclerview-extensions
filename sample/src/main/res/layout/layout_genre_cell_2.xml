@@ -9,10 +9,10 @@
         android:id="@+id/cell2_icon"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginBottom="5dp"
         android:layout_gravity="end"
-        android:layout_marginRight="5dp"
         android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp"
         app:srcCompat="@android:color/holo_green_dark" />
 
     <TextView
@@ -20,8 +20,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
-        android:layout_marginRight="50dp"
-        android:layout_marginTop="15dp" />
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="50dp" />
 
 </FrameLayout>
 

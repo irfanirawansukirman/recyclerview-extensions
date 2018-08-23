@@ -7,12 +7,10 @@ import android.view.View
  */
 open class RecyclerHolder(
         override val layoutType: Int,
-        override val bindMethod: ((View) -> Unit)) : IRecyclerHolder
+        val bindMethod: (View) -> Unit) : IRecyclerHolder{
+    override fun bindTo(view: View) = bindMethod.invoke(view)
+}
 
 class RecyclerHolderLayoutOnly(override val layoutType: Int) : IRecyclerHolder {
-    override val bindMethod: ((View) -> Unit) = emptyMethod
-
-    private companion object {
-        val emptyMethod: ((View) -> Unit) = {}
-    }
+    override fun bindTo(view: View) {}
 }

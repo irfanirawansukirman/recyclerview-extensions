@@ -19,25 +19,14 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         if (loadData(this)) {
-            main_recycler.adapter.apply {
-                add(constructCell(R.string.multirecycler, {
-                    switchTo(MultiRecyclerActivity::class.java)
-                }))
-                add(constructCell(R.string.no_classes_rec, {
-                    switchTo(NoClassesActivity::class.java)
-                }))
-                add(constructCell(R.string.one_way_paginator, {
-                    switchTo(OneWayActivity::class.java)
-                }))
-                add(constructCell(R.string.two_way_paginator, {
-                    switchTo(TwoWayActivity::class.java)
-                }))
-                add(constructCell(R.string.merge, {
-                    switchTo(MergeActivity::class.java)
-                }))
-            }
+            main_recycler.adapter.addPairs(listOf(
+                    constructCell(R.string.multirecycler, MultiRecyclerActivity::class.java),
+                    constructCell(R.string.no_classes_rec, NoClassesActivity::class.java),
+                    constructCell(R.string.one_way_paginator, OneWayActivity::class.java),
+                    constructCell(R.string.two_way_paginator, TwoWayActivity::class.java),
+                    constructCell(R.string.merge, MergeActivity::class.java)
+            ))
         }
-
     }
 
     private fun switchTo(kClass: Class<*>) {
@@ -46,9 +35,9 @@ class MainActivity : AppCompatActivity() {
         startActivity(int)
     }
 
-    private fun constructCell(title: Int, clickListener: () -> Unit): Pair<Int, (View) -> Unit> =
+    private fun <T> constructCell(title: Int, clazz: Class<T>): Pair<Int, (View) -> Unit> =
             R.layout.layout_main_cell to { view ->
                 view.maincell_text.setText(title)
-                view.setOnClickListener { clickListener() }
+                view.setOnClickListener { switchTo(clazz) }
             }
 }

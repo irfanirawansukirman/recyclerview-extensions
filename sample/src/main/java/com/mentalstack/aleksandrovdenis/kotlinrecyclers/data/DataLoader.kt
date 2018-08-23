@@ -10,12 +10,12 @@ import java.io.IOException
  */
 private fun loadJSON(context: Context, path: String): String? {
     return try {
-        val `is` = context.assets.open(path)
-        val size = `is`.available()
-        val buffer = ByteArray(size)
-        `is`.read(buffer)
-        `is`.close()
-        String(buffer)
+        context.assets?.open(path)?.let { stream ->
+            val buffer = ByteArray(stream.available())
+            stream.read(buffer)
+            stream.close()
+            String(buffer)
+        }
     } catch (ex: IOException) {
         ex.printStackTrace()
         null

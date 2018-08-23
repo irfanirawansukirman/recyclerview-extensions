@@ -22,11 +22,12 @@ class MergeDataHolder(internal val data: MergeData) : IRecyclerHolder {
     }
 
     override val layoutType: Int = R.layout.layout_merge_cell
-    override val bindMethod: (View) -> Unit
-        get() = { view ->
-            view.mergeCell_value.text = data.value.toString()
-            view.mergeCell_title.text = "# ${data.number}"
-        }
+
+    override fun bindTo(view: View) {
+        view.mergeCell_value.text = data.value.toString()
+        val text = "# ${data.number}"
+        view.mergeCell_title.text = text
+    }
 }
 
 fun MergeData.isEquals(other: MergeData) = (number == other.number)

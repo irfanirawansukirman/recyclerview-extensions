@@ -12,7 +12,16 @@ import org.jetbrains.anko.runOnUiThread
 class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
 
     var listener: RecyclerListener? = null
+    private val scrollListener = ScrollListener(this)
+    private var recycler: RecyclerView? = null
+    private val items = mutableListOf<IRecyclerHolder>()
+    private val visibleItems = mutableMapOf<AbstractViewHolder, IRecyclerHolder>()
 
+    //--------------------------------------------
+    //
+    // Common UI
+    //
+    //---------------------------------------------
     private var preloader: IRecyclerHolder? = null
 
     fun setPreloader(value: Int) = setPreloader(RecyclerHolderLayoutOnly(value))
@@ -32,6 +41,11 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
         endList = value
     }
 
+    //--------------------------------------------
+    //
+    // Pagination
+    //
+    //---------------------------------------------
     var paginationSensitive = 1
         set(value) {
             if (value > 1) field = value
@@ -50,11 +64,6 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
         }
 
     private var paginatorProcessed: Boolean = false
-    private val scrollListener = ScrollListener(this)
-
-    private var recycler: RecyclerView? = null
-
-    private val items = mutableListOf<IRecyclerHolder>()
 
     //--------------------------------------------
     //
@@ -66,19 +75,30 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
     fun indexOf(func: (IRecyclerHolder) -> Boolean) = items.indexOfFirst { func(it) }
 
     fun update(element: Pair<Int, (View) -> Unit>, oldElement: Pair<Int, (View) -> Unit>) {
-        items.find { it.layoutType == oldElement.first && it.bindMethod == oldElement.second }?.let {
+        items.find { it.layoutType == oldElement.first && (it as? RecyclerHolder)?.bindMethod == oldElement.second }?.let {
             update(RecyclerHolder(element.first, element.second), it)
         }
     }
 
     fun update(element: IRecyclerHolder, oldElement: IRecyclerHolder) {
-        items.indexOf(oldElement).let { update(element, it) }
+        update(element, items.indexOf(oldElement))
     }
 
     fun update(element: IRecyclerHolder, index: Int) {
         items[index] = element
         notifyItemChanged(index)
     }
+
+    fun replace(element: IRecyclerHolder) {
+        clear()
+        add(element)
+    }
+
+    fun replace(elements: List<IRecyclerHolder>) {
+        clear()
+        addAll(elements)
+    }
+
 
     fun add(value: Pair<Int, (View) -> Unit>) = add(RecyclerHolder(value.first, value.second))
     fun add(type: Int, method: (View) -> Unit) = add(RecyclerHolder(type, method))
@@ -100,11 +120,11 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
         }
     }
 
-    fun remove(element: IRecyclerHolder) = items.indexOf(element).let { remove(it) }
+    fun remove(element: IRecyclerHolder) = remove(items.indexOf(element))
     fun remove(element: Pair<Int, (View) -> Unit>) {
-        items.indexOfFirst {
-            it.layoutType == element.first && it.bindMethod == element.second
-        }.let { remove(it) }
+        remove(items.indexOfFirst {
+            it.layoutType == element.first && (it as? RecyclerHolder)?.bindMethod == element.second
+        })
     }
 
     fun clear() {
@@ -144,32 +164,40 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
     //
     //--------------------------------------------
 
-    override fun onBindViewHolder(holder: AbstractViewHolder?, position: Int) {
-        val item = items.getOrNull(position) ?: throw Exception("bounds of list")
-        if (holder?.type != item.layoutType) throw Exception("unsupported type holder/item")
-        val view = holder?.itemView ?: throw Exception("holder is null")
+    override fun onViewRecycled(holder: AbstractViewHolder) {
+        super.onViewRecycled(holder)
+        visibleItems.remove(holder)?.let { item ->
+            item.detachFrom(holder.itemView)
+        }
+    }
 
-        item.bindMethod.invoke(view)
+    override fun onBindViewHolder(holder: AbstractViewHolder, position: Int) {
+        val item = items.getOrNull(position) ?: throw Exception("bounds of list")
+        if (holder.type != item.layoutType) throw Exception("unsupported type holder/item")
+        val view = holder.itemView ?: throw Exception("holder is null")
+
+        visibleItems[holder] = item
+        item.bindTo(view)
     }
 
     override fun getItemViewType(position: Int): Int {
         return items.getOrNull(position)?.layoutType ?: throw Exception("bounds of list")
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): AbstractViewHolder {
-        val view = LayoutInflater.from(parent?.context).inflate(viewType, parent, false)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AbstractViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(viewType, parent, false)
         return AbstractViewHolder(viewType, view)
     }
 
     override fun getItemCount(): Int = items.size
 
-    override fun onAttachedToRecyclerView(recyclerView: RecyclerView?) {
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         this.recycler = recyclerView
         this.recycler?.addOnScrollListener(scrollListener)
     }
 
-    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView?) {
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
         super.onDetachedFromRecyclerView(recyclerView)
         this.recycler?.removeOnScrollListener(scrollListener)
         this.recycler = null

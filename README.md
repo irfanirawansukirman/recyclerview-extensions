@@ -57,7 +57,8 @@ Custom interface from adapter cells. Easy:
 ```kotlin
 interface IRecyclerHolder {
     val layoutType: Int
-    val bindMethod: (View) -> Unit
+    fun bindTo(view:View)
+    fun detachFrom(view:View)
 }
 ```
 Examples contains any ways from use, see it.

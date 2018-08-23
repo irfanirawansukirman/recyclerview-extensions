@@ -9,7 +9,7 @@ RecyclerView Extensions by Kotlin, Mentalstack
 now, available in Jcenter:
 
 ```JSON
-implementation 'com.mentalstack.android:recyclerview-extensions-kotlin:2.4'
+implementation 'com.mentalstack.android:recyclerview-extensions-kotlin:3.0'
 ```
 
 Please, see example - it's really easy!
@@ -90,10 +90,8 @@ Use xml or programmaticaly methods:
         multi_recycler.adapter.setPreloader( object :IRecyclerHolder{
             override val layoutType: Int 
                 get() = R.layout.layout_recycler_preloader
-            override val bindMethod: (View) -> Unit
-                get() = {
-                    //modify cell if need
-                }
+	    override fun bindTo(view:View) // modify cell if need
+            override val detachFrom(view:View) // remove observers, if need 
         })
 ```
 

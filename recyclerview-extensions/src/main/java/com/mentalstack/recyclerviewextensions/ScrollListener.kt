@@ -7,14 +7,13 @@ import android.widget.LinearLayout
  * Created by aleksandrovdenis on 15.01.2018.
  */
 
-enum class PaginatorDirection { START, END }
-
 internal class ScrollListener(private val adapter: RecyclerAdapter) : RecyclerView.OnScrollListener() {
 
     private var dX = 0
     private var dY = 0
 
     private var orientation: Int? = null
+    private var reversed: Boolean? = null
 
     override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
         super.onScrollStateChanged(recyclerView, newState)
@@ -22,6 +21,9 @@ internal class ScrollListener(private val adapter: RecyclerAdapter) : RecyclerVi
             recyclerView?.let { recycler ->
                 if (orientation == null)
                     orientation = recycler.getOrientation()
+
+                if (reversed == null)
+                    reversed = recycler.isReversed()
 
                 orientation?.let { orientation ->
                     calcPaginationDirection(recycler, orientation)?.let { direction ->
@@ -47,11 +49,23 @@ internal class ScrollListener(private val adapter: RecyclerAdapter) : RecyclerVi
             else -> null
         } ?: return null
 
+        if (reversed == true) {
+            return when {
+                delta < 0 && recycler.startVisibleIndex(reversed)?.let
+                { it > adapter.itemCount - adapter.paginationSensitive - 1 } ?: false ->
+                    PaginatorDirection.END
+                delta > 0 && recycler.endVisibleIndex(reversed)?.let
+                { it < adapter.paginationSensitive } ?: false ->
+                    PaginatorDirection.START
+                else -> null
+            }
+        }
+
         return when {
-            delta < 0 && recycler.startVibleIndex()?.let
+            delta < 0 && recycler.startVisibleIndex(reversed)?.let
             { it < adapter.paginationSensitive } ?: false ->
                 PaginatorDirection.START
-            delta > 0 && recycler.endVisibleIndex()?.let
+            delta > 0 && recycler.endVisibleIndex(reversed)?.let
             { it > adapter.itemCount - adapter.paginationSensitive - 1 } ?: false ->
                 PaginatorDirection.END
             else -> null

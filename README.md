@@ -9,7 +9,7 @@ RecyclerView Extensions by Kotlin, Mentalstack
 now, available in Jcenter:
 
 ```JSON
-implementation 'com.mentalstack.android:recyclerview-extensions-kotlin:3.0'
+implementation "com.mentalstack.android:recyclerview-extensions-kotlin:$recycler_ver"
 ```
 
 Please, see example - it's really easy!

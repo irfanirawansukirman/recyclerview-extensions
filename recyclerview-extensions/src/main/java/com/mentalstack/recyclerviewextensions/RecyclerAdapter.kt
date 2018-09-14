@@ -22,11 +22,11 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
     // Common UI
     //
     //---------------------------------------------
-    private var preloader: IRecyclerHolder? = null
+    private var loader: IRecyclerHolder? = null
 
-    fun setPreloader(value: Int) = setPreloader(RecyclerHolderLayoutOnly(value))
-    fun setPreloader(value: IRecyclerHolder) {
-        this.preloader = value
+    fun setLoader(value: Int) = setLoader(RecyclerHolderLayoutOnly(value))
+    fun setLoader(value: IRecyclerHolder) {
+        this.loader = value
     }
 
     private var error: IRecyclerHolder? = null
@@ -133,17 +133,17 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
     }
 
     fun merge(
-            mergeditems: List<IRecyclerHolder>,
+            mergedItems: List<IRecyclerHolder>,
             mergeFunc: (IRecyclerHolder, IRecyclerHolder) -> Boolean,
             addRestDirection: PaginatorDirection? = PaginatorDirection.END) {
 
-        val notMergetItems = mutableListOf<IRecyclerHolder>()
+        val notMergedItems = mutableListOf<IRecyclerHolder>()
 
-        mergeditems.forEach { currItem ->
+        mergedItems.forEach { currItem ->
             items.firstOrNull { mergeFunc(currItem, it) }?.let { foundedItem ->
                 val pos = items.indexOf(foundedItem)
                 items[pos] = currItem
-            } ?: notMergetItems.add(currItem)
+            } ?: notMergedItems.add(currItem)
         }
 
         addRestDirection?.let {
@@ -151,7 +151,7 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
                 PaginatorDirection.START -> 0
                 PaginatorDirection.END -> items.size
             }
-            items.addAll(position, notMergetItems)
+            items.addAll(position, notMergedItems)
         }
 
         safety {
@@ -213,7 +213,7 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
                 listener?.onLoadStarted(direction)
                 error?.let { remove(it) }
                 endList?.let { remove(it) }
-                preloader?.commonAdd(direction)
+                loader?.commonAdd(direction)
                 func.invoke { finishLoad(direction, it) }
             }
         }
@@ -241,7 +241,7 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
         paginatorProcessed = false
 
         safety {
-            preloader?.let { remove(it) }
+            loader?.let { remove(it) }
             if (newItems == null) {
                 listener?.onLoadEnded(direction)
                 listener?.onLoadError(direction)

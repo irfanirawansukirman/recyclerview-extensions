@@ -14,7 +14,7 @@ class ReversedActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_multirecycler)
+        setContentView(R.layout.activity_multyrecycler_reversed)
 
         toolbar_title.setText(R.string.reversed)
         toolbar_back.setOnClickListener { finish() }

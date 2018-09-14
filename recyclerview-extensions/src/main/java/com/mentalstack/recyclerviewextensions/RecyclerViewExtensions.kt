@@ -42,10 +42,12 @@ fun RecyclerView.getVisibleIndexes(): Pair<Int, Int>? {
 
 fun RecyclerView.elementsInRow() =
         (layoutManager as? LinearLayoutManager)?.let { 1 }
-                ?: (layoutManager as? GridLayoutManager)?.let { it.spanCount }
+                ?: (layoutManager as? GridLayoutManager)?.spanCount
 
-fun RecyclerView.endVisibleIndex() =
-        if (isReversed() == true) {
+
+fun RecyclerView.endVisibleIndex() = endVisibleIndex(null)
+fun RecyclerView.endVisibleIndex(reversed: Boolean?) =
+        if (reversed ?: isReversed() == true) {
             (layoutManager as? LinearLayoutManager)?.findFirstVisibleItemPosition()
                     ?: (layoutManager as? GridLayoutManager)?.findFirstVisibleItemPosition()
         } else {
@@ -53,14 +55,16 @@ fun RecyclerView.endVisibleIndex() =
                     ?: (layoutManager as? GridLayoutManager)?.findLastVisibleItemPosition()
         }
 
-fun RecyclerView.startVibleIndex() =
-        if (isReversed() == true) {
+fun RecyclerView.startVisibleIndex(reversed: Boolean?) =
+        if (reversed ?: isReversed() == true) {
             (layoutManager as? LinearLayoutManager)?.findLastVisibleItemPosition()
                     ?: (layoutManager as? GridLayoutManager)?.findLastVisibleItemPosition()
         } else {
             (layoutManager as? LinearLayoutManager)?.findFirstVisibleItemPosition()
                     ?: (layoutManager as? GridLayoutManager)?.findFirstVisibleItemPosition()
         }
+
+fun RecyclerView.startVisibleIndex() = startVisibleIndex(null)
 
 fun RecyclerView.scrollToTop(elementNum: Int) {
     (layoutManager as? LinearLayoutManager)?.let {

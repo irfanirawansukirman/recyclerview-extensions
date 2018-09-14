@@ -39,7 +39,7 @@ class MultiRecycler : RecyclerView {
 
         val preID = a.getResourceId(R.styleable.MultiRecycler_cell_preloader, 0)
         if (preID > 0)
-            adapter.setPreloader(preID)
+            adapter.setLoader(preID)
 
         val endID = a.getResourceId(R.styleable.MultiRecycler_cell_end, 0)
         if (endID > 0)

@@ -7,7 +7,7 @@ import android.view.View
  */
 open class RecyclerHolder(
         override val layoutType: Int,
-        val bindMethod: (View) -> Unit) : IRecyclerHolder{
+        val bindMethod: (View) -> Unit) : IRecyclerHolder {
     override fun bindTo(view: View) = bindMethod.invoke(view)
 }
 

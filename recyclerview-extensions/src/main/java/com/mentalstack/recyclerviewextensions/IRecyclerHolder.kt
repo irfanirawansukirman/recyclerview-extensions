@@ -8,7 +8,6 @@ import android.view.View
 
 interface IRecyclerHolder {
     val layoutType: Int
-    fun bindTo(view:View)
-    fun detachFrom(view: View){}
-
+    fun bindTo(view: View)
+    fun detachFrom(view: View) {}
 }

@@ -166,9 +166,7 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
 
     override fun onViewRecycled(holder: AbstractViewHolder) {
         super.onViewRecycled(holder)
-        visibleItems.remove(holder)?.let { item ->
-            item.detachFrom(holder.itemView)
-        }
+        visibleItems.remove(holder)?.detachFrom(holder.itemView)
     }
 
     override fun onBindViewHolder(holder: AbstractViewHolder, position: Int) {
@@ -227,7 +225,11 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
 
     private fun finishLoad(direction: PaginatorDirection, newItems: List<IRecyclerHolder>?) {
         newItems?.let {
-            val index = if (direction == PaginatorDirection.START) 0 else items.size
+            val index = if (direction == PaginatorDirection.START)
+                0
+            else
+                items.size
+
             items.addAll(index, it)
             safety {
                 notifyDataSetChanged()
@@ -239,10 +241,7 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
         paginatorProcessed = false
 
         safety {
-            preloader?.let {
-                print("test")
-                remove(it)
-            }
+            preloader?.let { remove(it) }
             if (newItems == null) {
                 listener?.onLoadEnded(direction)
                 listener?.onLoadError(direction)

@@ -25,6 +25,9 @@ private fun RecyclerView.attachLayout(direction: Int, elementsInRow: Int, revers
     setHasFixedSize(true)
 }
 
+fun RecyclerView.isReversed() = (layoutManager as? LinearLayoutManager)?.reverseLayout
+        ?: (layoutManager as? GridLayoutManager)?.reverseLayout
+
 fun RecyclerView.getOrientation() =
         (layoutManager as? LinearLayoutManager)?.orientation
                 ?: (layoutManager as? GridLayoutManager)?.orientation
@@ -41,13 +44,23 @@ fun RecyclerView.elementsInRow() =
         (layoutManager as? LinearLayoutManager)?.let { 1 }
                 ?: (layoutManager as? GridLayoutManager)?.let { it.spanCount }
 
-fun RecyclerView.lastVisibleIndex() =
-        (layoutManager as? LinearLayoutManager)?.findLastVisibleItemPosition()
-                ?: (layoutManager as? GridLayoutManager)?.findLastVisibleItemPosition()
+fun RecyclerView.endVisibleIndex() =
+        if (isReversed() == true) {
+            (layoutManager as? LinearLayoutManager)?.findFirstVisibleItemPosition()
+                    ?: (layoutManager as? GridLayoutManager)?.findFirstVisibleItemPosition()
+        } else {
+            (layoutManager as? LinearLayoutManager)?.findLastVisibleItemPosition()
+                    ?: (layoutManager as? GridLayoutManager)?.findLastVisibleItemPosition()
+        }
 
-fun RecyclerView.firstVibleIndex() =
-        (layoutManager as? LinearLayoutManager)?.findFirstVisibleItemPosition()
-                ?: (layoutManager as? GridLayoutManager)?.findFirstVisibleItemPosition()
+fun RecyclerView.startVibleIndex() =
+        if (isReversed() == true) {
+            (layoutManager as? LinearLayoutManager)?.findLastVisibleItemPosition()
+                    ?: (layoutManager as? GridLayoutManager)?.findLastVisibleItemPosition()
+        } else {
+            (layoutManager as? LinearLayoutManager)?.findFirstVisibleItemPosition()
+                    ?: (layoutManager as? GridLayoutManager)?.findFirstVisibleItemPosition()
+        }
 
 fun RecyclerView.scrollToTop(elementNum: Int) {
     (layoutManager as? LinearLayoutManager)?.let {

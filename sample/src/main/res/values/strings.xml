@@ -5,4 +5,5 @@
     <string name="one_way_paginator">One-way paginator</string>
     <string name="two_way_paginator">Two-way paginator</string>
     <string name="merge">Merge test</string>
+    <string name="reversed">Reversed</string>
 </resources>

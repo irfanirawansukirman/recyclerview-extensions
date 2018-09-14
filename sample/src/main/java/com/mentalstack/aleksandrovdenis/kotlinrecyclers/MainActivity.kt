@@ -24,7 +24,8 @@ class MainActivity : AppCompatActivity() {
                     constructCell(R.string.no_classes_rec, NoClassesActivity::class.java),
                     constructCell(R.string.one_way_paginator, OneWayActivity::class.java),
                     constructCell(R.string.two_way_paginator, TwoWayActivity::class.java),
-                    constructCell(R.string.merge, MergeActivity::class.java)
+                    constructCell(R.string.merge, MergeActivity::class.java),
+                    constructCell(R.string.reversed, ReversedActivity::class.java)
             ))
         }
     }

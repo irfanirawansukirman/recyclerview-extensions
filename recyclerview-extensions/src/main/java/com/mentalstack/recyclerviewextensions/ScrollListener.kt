@@ -40,20 +40,22 @@ internal class ScrollListener(private val adapter: RecyclerAdapter) : RecyclerVi
         super.onScrolled(recyclerView, dx, dy)
     }
 
-    private fun calcPaginationDirection(recycler: RecyclerView, dir: Int) =
-            when (dir) {
-                LinearLayout.HORIZONTAL -> dX
-                LinearLayout.VERTICAL -> dY
-                else -> null
-            }?.let { delta ->
-                when {
-                    delta < 0 && recycler.firstVibleIndex()?.let
-                    { it < adapter.paginationSensitive } ?: false ->
-                        PaginatorDirection.START
-                    delta > 0 && recycler.lastVisibleIndex()?.let
-                    { it > adapter.itemCount - adapter.paginationSensitive-1 } ?: false ->
-                        PaginatorDirection.END
-                    else -> null
-                }
-            }
+    private fun calcPaginationDirection(recycler: RecyclerView, dir: Int): PaginatorDirection? {
+        val delta = when (dir) {
+            LinearLayout.HORIZONTAL -> dX
+            LinearLayout.VERTICAL -> dY
+            else -> null
+        } ?: return null
+
+        return when {
+            delta < 0 && recycler.startVibleIndex()?.let
+            { it < adapter.paginationSensitive } ?: false ->
+                PaginatorDirection.START
+            delta > 0 && recycler.endVisibleIndex()?.let
+            { it > adapter.itemCount - adapter.paginationSensitive - 1 } ?: false ->
+                PaginatorDirection.END
+            else -> null
+        }
+    }
+
 }

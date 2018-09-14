@@ -4,7 +4,7 @@ apply plugin: 'kotlin-android'
 ext {
     PUBLISH_GROUP_ID = 'com.mentalstack.android'
     PUBLISH_ARTIFACT_ID = 'recyclerview-extensions-kotlin'
-    PUBLISH_VERSION = '3.0'
+    PUBLISH_VERSION = '3.1'
 }
 
 android {
@@ -31,7 +31,7 @@ android {
 }
 
 buildscript {
-    ext.kotlin_version = '1.2.61'
+    ext.kotlin_version = '1.2.70'
 }
 def supportLibrary = "27.1.1"
 dependencies {

@@ -41,7 +41,7 @@ class MergeActivity : Activity() {
             })
         }
 
-        items.map { it.number }.joinToString(",", "add items ").let {
+        items.asSequence().map { it.number }.joinToString(",", "add items ").let {
             Toast.makeText(this, it, Toast.LENGTH_LONG).show()
         }
     }

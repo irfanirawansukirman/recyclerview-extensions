@@ -11,7 +11,6 @@ import kotlinx.android.synthetic.main.toolbar.*
  */
 
 class TwoWayActivity : Activity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_multirecycler)

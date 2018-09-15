@@ -11,13 +11,16 @@ import org.jetbrains.anko.runOnUiThread
  */
 class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
 
-    var listener: RecyclerListener? = null
+    private val listeners = mutableSetOf<RecyclerListener>()
+    fun addListener(listener: RecyclerListener) = listeners.add(listener)
+    fun removeListener(listener: RecyclerListener) = listeners.remove(listener)
+
     private val scrollListener = ScrollListener(this)
     private var recycler: RecyclerView? = null
     private val items = mutableListOf<IRecyclerHolder>()
     private val visibleItems = mutableMapOf<AbstractViewHolder, IRecyclerHolder>()
 
-    //--------------------------------------------
+    //---------------------------------------------
     //
     // Common UI
     //
@@ -41,7 +44,7 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
         endList = value
     }
 
-    //--------------------------------------------
+    //---------------------------------------------
     //
     // Pagination
     //
@@ -65,7 +68,7 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
 
     private var paginatorProcessed: Boolean = false
 
-    //--------------------------------------------
+    //---------------------------------------------
     //
     // Interface methods
     //
@@ -99,18 +102,33 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
         addAll(elements)
     }
 
+    fun add(value: Pair<Int, (View) -> Unit>, toStart: Boolean = false) =
+            add(RecyclerHolder(value.first, value.second), toStart)
 
-    fun add(value: Pair<Int, (View) -> Unit>) = add(RecyclerHolder(value.first, value.second))
-    fun add(type: Int, method: (View) -> Unit) = add(RecyclerHolder(type, method))
-    fun add(element: IRecyclerHolder) {
-        items.add(element)
-        notifyItemInserted(items.size - 1)
+    fun add(type: Int, method: (View) -> Unit, toStart: Boolean = false) =
+            add(RecyclerHolder(type, method), toStart)
+
+    fun add(element: IRecyclerHolder, toStart: Boolean = false) {
+        if (toStart) {
+            items.add(0, element)
+            notifyDataSetChanged()
+        } else {
+            items.add(element)
+            notifyItemInserted(items.size - 1)
+        }
     }
 
-    fun addPairs(list: List<Pair<Int, (View) -> Unit>>) = addAll(list.map { RecyclerHolder(it.first, it.second) })
-    fun addAll(elements: List<IRecyclerHolder>) {
-        items.addAll(elements)
-        notifyItemRangeInserted(items.size - elements.size, elements.size)
+    fun addPairs(list: List<Pair<Int, (View) -> Unit>>, toStart: Boolean = false) =
+            addAll(list.map { RecyclerHolder(it.first, it.second) }, toStart)
+
+    fun addAll(elements: List<IRecyclerHolder>, toStart: Boolean = false) {
+        if (toStart) {
+            items.addAll(0, elements)
+            notifyDataSetChanged()
+        } else {
+            items.addAll(elements)
+            notifyItemRangeInserted(items.size - elements.size, elements.size)
+        }
     }
 
     fun remove(index: Int) {
@@ -210,7 +228,7 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
 
             safety {
                 paginatorProcessed = true
-                listener?.onLoadStarted(direction)
+                listeners.forEach { it.onLoadStarted(direction) }
                 error?.let { remove(it) }
                 endList?.let { remove(it) }
                 loader?.commonAdd(direction)
@@ -243,11 +261,14 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
         safety {
             loader?.let { remove(it) }
             if (newItems == null) {
-                listener?.onLoadEnded(direction)
-                listener?.onLoadError(direction)
+                listeners.forEach {
+                    it.onLoadEnded(direction)
+                    it.onLoadError(direction)
+                }
+
                 error?.commonAdd(direction)
             } else {
-                listener?.onLoadEnded(direction)
+                listeners.forEach { it.onLoadEnded(direction) }
                 if (newItems.isEmpty())
                     endList?.commonAdd(direction)
             }

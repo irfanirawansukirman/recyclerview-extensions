@@ -4,8 +4,10 @@ apply plugin: 'kotlin-android'
 ext {
     PUBLISH_GROUP_ID = 'com.mentalstack.android'
     PUBLISH_ARTIFACT_ID = 'recyclerview-extensions-kotlin'
-    PUBLISH_VERSION = '3.2'
+    PUBLISH_VERSION = '3.3'
 }
+
+//to build run ->          ./gradlew clean build generateRelease
 
 android {
     compileSdkVersion 27
@@ -13,7 +15,7 @@ android {
         minSdkVersion 15
         targetSdkVersion 27
         versionCode 1
-        versionName "3.2"
+        versionName "3.3"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }

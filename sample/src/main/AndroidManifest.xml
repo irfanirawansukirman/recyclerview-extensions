@@ -39,6 +39,10 @@
         <activity
             android:name=".ReversedActivity"
             android:noHistory="true" />
+
+        <activity
+            android:name=".TestAddActivity"
+            android:noHistory="true" />
     </application>
 
 </manifest>

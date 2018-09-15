@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.mentalstack.aleksandrovdenis.kotlinrecyclers.data.loadData
+import junit.framework.Test
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.layout_main_cell.view.*
 
@@ -25,7 +26,8 @@ class MainActivity : AppCompatActivity() {
                     constructCell(R.string.one_way_paginator, OneWayActivity::class.java),
                     constructCell(R.string.two_way_paginator, TwoWayActivity::class.java),
                     constructCell(R.string.merge, MergeActivity::class.java),
-                    constructCell(R.string.reversed, ReversedActivity::class.java)
+                    constructCell(R.string.reversed, ReversedActivity::class.java),
+                    constructCell(R.string.test_add, TestAddActivity::class.java)
             ))
         }
     }

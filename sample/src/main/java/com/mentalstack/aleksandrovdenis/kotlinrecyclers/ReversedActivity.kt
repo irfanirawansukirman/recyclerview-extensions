@@ -11,7 +11,6 @@ import kotlinx.android.synthetic.main.toolbar.*
  */
 
 class ReversedActivity : Activity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_multyrecycler_reversed)

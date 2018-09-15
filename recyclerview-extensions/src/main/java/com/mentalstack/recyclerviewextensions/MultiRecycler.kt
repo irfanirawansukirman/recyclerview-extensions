@@ -32,11 +32,6 @@ class MultiRecycler : RecyclerView {
         val a = context.obtainStyledAttributes(attrs,
                 R.styleable.MultiRecycler, 0, 0)
 
-        val direction = a.getInt(R.styleable.MultiRecycler_direction, 0)
-        val cells = a.getInt(R.styleable.MultiRecycler_cells, 1)
-        val reverse = a.getBoolean(R.styleable.MultiRecycler_reverse, false)
-        val sensitive = a.getInt(R.styleable.MultiRecycler_pagination_sensitive, 1)
-
         val preID = a.getResourceId(R.styleable.MultiRecycler_cell_preloader, 0)
         if (preID > 0)
             adapter.setLoader(preID)
@@ -49,8 +44,12 @@ class MultiRecycler : RecyclerView {
         if (errID > 0)
             adapter.setError(errID)
 
+        val sensitive = a.getInt(R.styleable.MultiRecycler_pagination_sensitive, 1)
         adapter.paginationSensitive = sensitive
 
+        val direction = a.getInt(R.styleable.MultiRecycler_direction, 0)
+        val cells = a.getInt(R.styleable.MultiRecycler_cells, 1)
+        val reverse = a.getBoolean(R.styleable.MultiRecycler_reverse, false)
         when (direction) {
             1 -> setVertical(cells, reverse)
             2 -> setHorizontal(cells, reverse)
@@ -58,5 +57,4 @@ class MultiRecycler : RecyclerView {
 
         a.recycle()
     }
-
 }

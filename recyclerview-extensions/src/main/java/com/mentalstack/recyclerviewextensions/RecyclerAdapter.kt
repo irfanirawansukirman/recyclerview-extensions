@@ -11,9 +11,29 @@ import org.jetbrains.anko.runOnUiThread
  */
 class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
 
-    private val listeners = mutableSetOf<RecyclerListener>()
-    fun addListener(listener: RecyclerListener) = listeners.add(listener)
-    fun removeListener(listener: RecyclerListener) = listeners.remove(listener)
+    private val listeners = mutableSetOf<RecyclerHandler>()
+    fun addListener(listener: RecyclerHandler) = listeners.add(listener)
+    fun removeListener(listener: RecyclerHandler) = listeners.remove(listener)
+
+    fun addListener(func: (RecyclerState) -> Unit) {
+        listeners.forEach {
+            if ((it as? AbstractRecyclerHandler)?.func == func) return
+        }
+
+        addListener(AbstractRecyclerHandler(func))
+    }
+
+    fun removeListener(func: (RecyclerState) -> Unit) {
+        listeners.forEach {
+            if ((it as? AbstractRecyclerHandler)?.func == func) {
+                removeListener(it)
+                return
+            }
+        }
+    }
+
+    private fun processListeners(state: RecyclerState) =
+            listeners.forEach { it.handleRecyclerState(state) }
 
     private val scrollListener = ScrollListener(this)
     private var recycler: RecyclerView? = null
@@ -190,10 +210,9 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
     override fun onBindViewHolder(holder: AbstractViewHolder, position: Int) {
         val item = items.getOrNull(position) ?: throw Exception("bounds of list")
         if (holder.type != item.layoutType) throw Exception("unsupported type holder/item")
-        val view = holder.itemView ?: throw Exception("holder is null")
 
         visibleItems[holder] = item
-        item.bindTo(view)
+        item.bindTo(holder.itemView)
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -228,7 +247,7 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
 
             safety {
                 paginatorProcessed = true
-                listeners.forEach { it.onLoadStarted(direction) }
+                processListeners(RecyclerState.LoadStarted(direction))
                 error?.let { remove(it) }
                 endList?.let { remove(it) }
                 loader?.commonAdd(direction)
@@ -260,15 +279,14 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
 
         safety {
             loader?.let { remove(it) }
+            processListeners(RecyclerState.LoadEnded(
+                    direction = direction,
+                    countNew = newItems?.count(),
+                    countTotal = items.count()))
             if (newItems == null) {
-                listeners.forEach {
-                    it.onLoadEnded(direction)
-                    it.onLoadError(direction)
-                }
-
+                processListeners(RecyclerState.LoadError(direction))
                 error?.commonAdd(direction)
             } else {
-                listeners.forEach { it.onLoadEnded(direction) }
                 if (newItems.isEmpty())
                     endList?.commonAdd(direction)
             }

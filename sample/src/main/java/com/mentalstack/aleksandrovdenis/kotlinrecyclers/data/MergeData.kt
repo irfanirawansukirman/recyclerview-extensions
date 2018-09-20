@@ -13,12 +13,11 @@ data class MergeData(val number: Int, val value: Int)
 
 class MergeDataHolder(internal val data: MergeData) : IRecyclerHolder {
     companion object {
-        fun equalizator(one: IRecyclerHolder, two: IRecyclerHolder): Boolean =
-                (one as? MergeDataHolder)?.let { itemOne ->
-                    (two as? MergeDataHolder)?.let { itemTwo ->
-                        itemOne.isEquals(itemTwo)
-                    }
-                } ?: false
+        fun equalizator(one: IRecyclerHolder, two: IRecyclerHolder): Boolean{
+            val itemOne = one as? MergeDataHolder ?: return false
+            val itemTwo = two as? MergeDataHolder ?: return false
+            return itemOne.isEquals(itemTwo)
+        }
     }
 
     override val layoutType: Int = R.layout.layout_merge_cell

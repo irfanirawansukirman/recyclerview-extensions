@@ -9,4 +9,5 @@
     <string name="test_add">Test add parameters</string>
     <string name="add_to_start">Add to Start</string>
     <string name="add_to_end">Add to End</string>
+    <string name="actions">Actions</string>
 </resources>

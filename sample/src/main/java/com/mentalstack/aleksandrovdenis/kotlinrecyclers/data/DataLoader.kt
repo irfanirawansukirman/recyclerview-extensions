@@ -38,12 +38,13 @@ fun Context.getIconID(name: String) = resources.getIdentifier(name, "drawable", 
 
 fun loadData(baseContext: Context): Boolean {
     loadJSON(baseContext, "music_genres.json")?.let { rawString ->
-        parseString(rawString)?.let { rawObj ->
-            (rawObj["objects"] as? List<Map<String, Any>>)?.let {
-                listData = it
-                return true
-            }
-        }
+        parseString(rawString)
+                ?.get("objects")
+                ?.let { it as? List<Map<String, Any>> }
+                ?.let {
+                    listData = it
+                    return true
+                }
     }
     return false
 }

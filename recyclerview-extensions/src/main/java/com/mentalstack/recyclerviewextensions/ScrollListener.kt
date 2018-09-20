@@ -15,28 +15,27 @@ internal class ScrollListener(private val adapter: RecyclerAdapter) : RecyclerVi
     private var orientation: Int? = null
     private var reversed: Boolean? = null
 
-    override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
+    override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
         super.onScrollStateChanged(recyclerView, newState)
         if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-            recyclerView?.let { recycler ->
-                if (orientation == null)
-                    orientation = recycler.getOrientation()
+            if (orientation == null)
+                orientation = recyclerView.getOrientation()
 
-                if (reversed == null)
-                    reversed = recycler.isReversed()
+            if (reversed == null)
+                reversed = recyclerView.isReversed()
 
-                orientation?.let { orientation ->
-                    calcPaginationDirection(recycler, orientation)?.let { direction ->
-                        adapter.processPagination(direction)
-                    }
+            orientation?.let { orientation ->
+                calcPaginationDirection(recyclerView, orientation)?.let { direction ->
+                    adapter.processPagination(direction)
                 }
             }
+
             dX = 0
             dY = 0
         }
     }
 
-    override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
         dX += dx
         dY += dy
         super.onScrolled(recyclerView, dx, dy)

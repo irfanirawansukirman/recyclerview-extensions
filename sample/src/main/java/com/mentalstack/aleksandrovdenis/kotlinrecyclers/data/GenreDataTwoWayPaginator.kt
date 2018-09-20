@@ -17,7 +17,6 @@ class GenreDataTwoWayPaginator : TwoWayPaginator() {
             alreadyLoaded += newList.size
 
             Timer().schedule(timerTask { onComplete(newList) }, 100)
-
         }
 
     private var testCounterStart = 0
@@ -29,7 +28,5 @@ class GenreDataTwoWayPaginator : TwoWayPaginator() {
             alreadyLoadedStart += newList.size
 
             Timer().schedule(timerTask { onComplete(newList) }, 100)
-
         }
-
 }

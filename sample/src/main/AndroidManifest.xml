@@ -43,6 +43,10 @@
         <activity
             android:name=".TestAddActivity"
             android:noHistory="true" />
+
+        <activity
+            android:name=".EventsActivity"
+            android:noHistory="true" />
     </application>
 
 </manifest>

@@ -31,5 +31,4 @@ class MultiRecyclerActivity : Activity() {
                         multi_recycler.adapter.add(GenreData(rawElement).constructViewCell2())
                 }
             }
-
 }

@@ -53,6 +53,7 @@ class MultiRecycler : RecyclerView {
         when (direction) {
             1 -> setVertical(cells, reverse)
             2 -> setHorizontal(cells, reverse)
+            else -> setVertical(cells, reverse)
         }
 
         a.recycle()

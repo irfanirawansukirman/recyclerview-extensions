@@ -10,31 +10,6 @@ import org.jetbrains.anko.runOnUiThread
  * Created by aleksandrovdenis on 13.01.2018.
  */
 class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
-
-    private val listeners = mutableSetOf<RecyclerHandler>()
-    fun addListener(listener: RecyclerHandler) = listeners.add(listener)
-    fun removeListener(listener: RecyclerHandler) = listeners.remove(listener)
-
-    fun addListener(func: (RecyclerState) -> Unit) {
-        listeners.forEach {
-            if ((it as? AbstractRecyclerHandler)?.func == func) return
-        }
-
-        addListener(AbstractRecyclerHandler(func))
-    }
-
-    fun removeListener(func: (RecyclerState) -> Unit) {
-        listeners.forEach {
-            if ((it as? AbstractRecyclerHandler)?.func == func) {
-                removeListener(it)
-                return
-            }
-        }
-    }
-
-    private fun processListeners(state: RecyclerState) =
-            listeners.forEach { it.handleRecyclerState(state) }
-
     private val scrollListener = ScrollListener(this)
     private var recycler: RecyclerView? = null
     private val items = mutableListOf<IRecyclerHolder>()
@@ -69,6 +44,8 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
     // Pagination
     //
     //---------------------------------------------
+
+    private var paginatorProcessed: Boolean = false
     var paginationSensitive = 1
         set(value) {
             if (value > 1) field = value
@@ -86,7 +63,18 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
             afterPaginatorAdded(PaginatorDirection.END)
         }
 
-    private var paginatorProcessed: Boolean = false
+    //---------------------------------------------
+    //
+    // Listeners
+    //
+    //---------------------------------------------
+
+    private val listeners = mutableSetOf<(RecyclerState) -> Unit>()
+    fun addListener(listener: (RecyclerState) -> Unit) = listeners.add(listener)
+    fun removeListener(listener: (RecyclerState) -> Unit) = listeners.remove(listener)
+
+    private fun processListeners(state: RecyclerState) =
+            listeners.forEach { it(state) }
 
     //---------------------------------------------
     //
@@ -122,12 +110,6 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
         addAll(elements)
     }
 
-    fun add(value: Pair<Int, (View) -> Unit>, toStart: Boolean = false) =
-            add(RecyclerHolder(value.first, value.second), toStart)
-
-    fun add(type: Int, method: (View) -> Unit, toStart: Boolean = false) =
-            add(RecyclerHolder(type, method), toStart)
-
     fun add(element: IRecyclerHolder, toStart: Boolean = false) {
         if (toStart) {
             items.add(0, element)
@@ -137,9 +119,6 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
             notifyItemInserted(items.size - 1)
         }
     }
-
-    fun addPairs(list: List<Pair<Int, (View) -> Unit>>, toStart: Boolean = false) =
-            addAll(list.map { RecyclerHolder(it.first, it.second) }, toStart)
 
     fun addAll(elements: List<IRecyclerHolder>, toStart: Boolean = false) {
         if (toStart) {
@@ -159,6 +138,7 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
     }
 
     fun remove(element: IRecyclerHolder) = remove(items.indexOf(element))
+
     fun remove(element: Pair<Int, (View) -> Unit>) {
         remove(items.indexOfFirst {
             it.layoutType == element.first && (it as? RecyclerHolder)?.bindMethod == element.second
@@ -199,6 +179,8 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
     }
 
     //--------------------------------------------
+    //
+    // Main
     //
     //--------------------------------------------
 
@@ -313,4 +295,3 @@ class RecyclerAdapter : RecyclerView.Adapter<AbstractViewHolder>() {
 }
 
 class AbstractViewHolder(val type: Int, view: View) : RecyclerView.ViewHolder(view)
-
